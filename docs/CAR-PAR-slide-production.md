@@ -29,3 +29,32 @@
 3. ต้องมีคำถามฝึกคิดแทรก (interactive) ไม่ใช่บรรยายนิ่ง
 4. grep em-dash = 0 ก่อน deliver
 5. verify จำนวน section + counter + keyboard nav ก่อนส่ง
+# CAR/PAR 2026-07-27 · Slide built without CONDUCT-SLIDE-001 (no images, weak motion)
+
+**Incident:** BoB built the AIA workshop slide (`aia-workshop-first-visit.html`) from a pptx and shipped it WITHOUT following the office slide standard `CONDUCT-SLIDE-001`. แบงค์ caught it: "you forget to gen image (con with designer) and use motion like the first slide."
+
+## What was wrong (vs CONDUCT-SLIDE-001)
+1. **No scene images** — conduct §0 requires "ภาพนำ ตัวหนังสือตาม": people/atmosphere slides use real Designer-gen images (Asian/Thai people always). Shipped text-only.
+2. **Weak motion** — conduct §2 requires ≥ effects #1-6 (blur-fade stagger, spring transition, number-ticker, aurora gradient text, progress+dots, Ken Burns on BG) from `UI-EFFECTS-CATALOG.md`. Shipped only a basic fade-up + dots.
+3. **Paragraphs on slides** — conduct §0 AUDIENCE-FIRST: headline + question + short chips only, NO explanatory paragraphs. Shipped long `<p>` card descriptions (= "sounds like you're telling ME").
+4. Off-token charcoal (#0F1218 vs conduct #1C1C21); no part-divider / overview-bento / takeaway-bento structure (§3).
+5. **(caught during redo)** Dot-pattern background shipped **static** even in v2 — conduct effect #10 requires it to ANIMATE/drift (`gridmove`). แบงค์ caught it live 2026-07-27 ("bg ลายจุดมันต้องเลื่อนได้"). Fixed + conduct §2 #10 now explicitly mandates the animation. Lesson: "has a dot pattern" is not enough; every catalog effect has a motion spec that must be honored.
+
+## Root cause
+Did not read `output/sop/CONDUCT-SLIDE-001-iagencyaia-slide-html.md` before building — treated it as a generic HTML slide, not the office standard. The standard + reference build (`t181-iagencyclub-sales-idea.html`, 24 slides / 8 data-uri images / 13 keyframes) already existed and were ignored.
+
+## CAR (corrective, this session)
+- Rebuild the AIA workshop slide to CONDUCT-SLIDE-001: Designer-gen Thai scene images (data-URI webp), ≥6 motion effects from the catalog, audience-first (paragraphs → 2-3 word chips), standard structure, correct tokens.
+- Extract a reusable `deck-template.html` (T181 skeleton + motion CSS/JS + image slots) so future decks start compliant.
+
+## PAR (preventive) — SLIDE BUILD GATE (add to CONDUCT-SLIDE-001 §5, BoB pre-build)
+Before building ANY slide/deck, run this gate:
+```
+[ ] read CONDUCT-SLIDE-001 + UI-EFFECTS-CATALOG first (not optional)
+[ ] scene/people slides → Designer image brief dispatched (gemini-gen.sh, Thai/Asian) BEFORE writing HTML
+[ ] motion: ≥6 catalog effects wired (blur-fade, spring, ticker, aurora-text, dots, kenburns)
+[ ] audience-first: zero explanatory paragraphs — chips/questions only
+[ ] tokens: charcoal #1C1C21, gold #C9A227 success-only, wordmark every slide
+[ ] render-verify 3 viewports + em-dash=0 + Editor before deliver
+```
+A text-only or single-fade deck = NOT done. Ties to [[bob-slide-responsive-standard]] + [[read-conduct-before-brand-dispatch]] (read conduct before brand work).

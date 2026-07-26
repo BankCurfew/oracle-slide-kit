@@ -1,197 +1,190 @@
-<!DOCTYPE html>
+<!doctype html>
+<!--
+  iAgencyAIA DECK TEMPLATE · compliant starter (CONDUCT-SLIDE-001)
+  ================================================================
+  HOW TO USE
+  1. Copy this file → output/slides/<your-deck>.html
+  2. Read CONDUCT-SLIDE-001 first (output/sop/). AUDIENCE-FIRST: headline + question + chips ONLY, no paragraphs.
+  3. Scene/people slides → Designer gen Thai images (gemini-gen.sh) BEFORE writing HTML.
+  4. Image slides: put a marker like __IMG_COVER__ in `--bg:__IMG_COVER__`, then inject with:
+       python3 -c "import base64;h=open('deck.html').read();
+       h=h.replace('__IMG_COVER__',\"url('data:image/webp;base64,\"+base64.b64encode(open('img.webp','rb').read()).decode()+\"')\");
+       open('deck.html','w').write(h)"
+     (total embedded images < ~500KB; webp).
+  5. Motion is already wired (≥6 effects): Ken Burns, aurora title, number-ticker([data-tick]), blur-fade stagger(.rv),
+     animated dot-pattern(gridmove), progress+dots. Use `class="aurora"` on key title words, `data-tick="N"` on a count.
+  6. gold (#C9A227) ONLY on takeaway/success. wordmark on every slide (already fixed top-right).
+  7. Verify before deliver: render 3 viewports (desktop 1280x720 / portrait 390x844 / landscape 844x390),
+     em-dash grep = 0, Editor review. Deliver: commit + OneDrive `iAgencyAIA/iTraining-Slides/`.
+  Reference builds: t181-iagencyclub-sales-idea.html · aia-workshop-first-visit.html
+-->
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>iTraining T.N/6 : [TOPIC] (Draft)</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>iAgencyAIA Deck</title>
 <style>
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+:root{
+  --red:#D31145; --char:#1C1C21; --char2:#26262c; --salmon:#E8998D; --gold:#C9A227;
+  --white:#FFFFFF; --muted:#B8AFA6; --line:rgba(255,255,255,.12);
+  --spring:cubic-bezier(.22,1.2,.36,1);
+  --font:"Sarabun","Noto Sans Thai","Leelawadee UI",-apple-system,"Segoe UI",sans-serif;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;font-family:"Sukhumvit Set","Noto Sans Thai",-apple-system,sans-serif;background:#0d0d10;color:#f5f5f7}
-.slide{display:none;width:100%;height:100%;position:relative;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:46px 4.5vw 96px;overflow:hidden}
-.slide.active{display:flex}
-.slide.light{background:#FFFDF8;color:#2B2620}
-.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.45;animation:drift 14s ease-in-out infinite alternate;pointer-events:none}
-.o-red{background:#b30d28}.o-gold{background:#8a6d00}.o-blue{background:#1e3a8a}
-.light .orb{opacity:.16}
-@keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(46px,32px) scale(1.1)}}
-.bar{position:absolute;top:0;left:0;height:4px;background:linear-gradient(90deg,#C8102E,#F5C518);transition:width .4s;z-index:9}
-.sn{position:absolute;bottom:24px;right:32px;font-size:12px;z-index:9;background:rgba(128,128,128,.18);color:inherit;opacity:.7;padding:2px 10px;border-radius:99px}
-.nav{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:9}
-.nav button{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;padding:11px 0;width:130px;border-radius:9px;font-size:15px;cursor:pointer;font-family:inherit;backdrop-filter:blur(6px)}
-.nav button:hover{background:rgba(255,255,255,.22)}
-.light .nav button{background:rgba(0,0,0,.07);border-color:rgba(0,0,0,.1);color:#2B2620}
-.light .nav button:hover{background:rgba(0,0,0,.14)}
-.kicker{font-size:clamp(13px,1.25vw,17px);font-weight:700;letter-spacing:5px;color:#a1a1a6;text-transform:uppercase}
-.light .kicker{color:#8a6d00}
-h1.big{font-size:clamp(30px,4.2vw,62px);font-weight:800;letter-spacing:-.5px;line-height:1.35;margin-top:12px;background:linear-gradient(180deg,#fff 30%,#95959c);-webkit-background-clip:text;background-clip:text;color:transparent}
-.light h1.big{background:linear-gradient(180deg,#2B2620 40%,#6b6258);-webkit-background-clip:text;background-clip:text;color:transparent}
-.accent{background:linear-gradient(120deg,#ff375f,#F5C518);-webkit-background-clip:text;background-clip:text;color:transparent}
-.light .accent{background:linear-gradient(120deg,#C8102E,#c79100);-webkit-background-clip:text;background-clip:text;color:transparent}
-.sub{font-size:clamp(15px,1.5vw,21px);color:#c7c7cc;margin-top:12px;line-height:1.7}
-.light .sub{color:#6b6258}
-.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px);border-radius:24px}
-.light .glass{background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.07);box-shadow:0 10px 34px rgba(43,38,32,.08)}
-.grid{display:grid;gap:clamp(12px,1.5vw,22px);width:min(1240px,94vw);margin-top:clamp(20px,3.2vh,40px)}
-.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
-.card{padding:clamp(16px,1.9vw,28px);text-align:left;position:relative;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
-.card:hover{transform:translateY(-8px)}
-.card h3{font-size:clamp(17px,1.65vw,23px);font-weight:800;margin-bottom:6px}
-.card p,.card li{font-size:clamp(14px,1.3vw,18px);line-height:1.68;color:#d1d1d6}
-.light .card p,.light .card li{color:#4a443c}
-.card ul{padding-left:18px}
-.gl-red h3{color:#ff6b87}.light .gl-red h3{color:#C8102E}
-.gl-gold h3{color:#F5C518}.light .gl-gold h3{color:#8a6d00}
-.gl-blue h3{color:#7da2ff}.light .gl-blue h3{color:#1e3a8a}
-.hero{position:absolute;inset:0;z-index:0}
-.hero img{width:100%;height:100%;object-fit:cover}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(13,13,16,.94) 32%,rgba(13,13,16,.55) 60%,rgba(13,13,16,.25))}
-.hero.dim::after{background:rgba(13,13,16,.78)}
-.z{position:relative;z-index:2}
-.bq{font-size:clamp(26px,3.6vw,54px);font-weight:800;line-height:1.45;max-width:900px}
-.hint{font-size:clamp(15px,1.5vw,20px);margin-top:20px;font-weight:600;opacity:.8}
-.light .hint{color:#8a6d00}
-.opt{background:rgba(200,16,46,.08);border:2px solid rgba(200,16,46,.22);border-radius:14px;padding:16px 26px;font-size:clamp(17px,1.8vw,24px);font-weight:700;color:#2B2620}
-.opts{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap;justify-content:center}
-.na{background:#fff;border:3px dashed #8a6d00;border-radius:14px;padding:20px 24px;max-width:900px;width:100%;margin-top:18px;text-align:left}
-.na p{font-size:clamp(16px,1.7vw,22px);color:#444;line-height:2.3;font-weight:500}
-.mantra{margin-top:clamp(16px,2.6vh,30px);font-size:clamp(13px,1.25vw,17px);font-weight:600;letter-spacing:2px;color:#F5C518}
-.light .mantra{color:#C8102E}
-.pill{display:inline-block;border-radius:99px;padding:8px 20px;font-size:clamp(13px,1.3vw,18px);font-weight:700;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18)}
-.light .pill{background:rgba(200,16,46,.07);border-color:rgba(200,16,46,.25);color:#2B2620}
-.cy{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:18px}
-.ci{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);border-radius:11px;padding:13px 18px;font-size:clamp(14px,1.4vw,19px);font-weight:600}
-.ca{font-size:20px;opacity:.4}
-@keyframes rise{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}
-.slide.active .a{animation:rise .7s ease both}
-.slide.active .ai{animation:fadeIn .55s ease both}
-.slide.active .as{animation:scaleIn .55s ease both}
-.slide.active .d1{animation-delay:.12s}.slide.active .d2{animation-delay:.24s}.slide.active .d3{animation-delay:.38s}.slide.active .d4{animation-delay:.52s}.slide.active .d5{animation-delay:.66s}.slide.active .d6{animation-delay:.8s}
-@media (max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}.slide{overflow-y:auto;justify-content:flex-start;padding-top:40px}.bq{font-size:24px}}
-.lg-t{color:#fff}.light .lg-t{color:#1a1a1a}
+html,body{height:100%}
+body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;-webkit-font-smoothing:antialiased}
+#deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:clamp(26px,5.4vw,72px);gap:clamp(12px,2.4vh,26px);overflow-y:auto;background:var(--char)}
+.slide.on{display:flex}
+/* effect #10 — ANIMATED dot pattern (must drift, not static) */
+.slide.dots::after{content:"";position:absolute;inset:-26px;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;
+  animation:gridmove 14s linear infinite}
+@keyframes gridmove{to{background-position:26px 26px}}
+.slide>*{position:relative;z-index:2}
+/* effect #6 — Ken Burns on image bg */
+.slide.img::before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--bg);background-size:cover;background-position:center;
+  animation:kenburns 26s ease-in-out infinite alternate}
+.slide.img::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,rgba(20,20,24,.96) 0%,rgba(20,20,24,.72) 42%,rgba(20,20,24,.28) 100%),
+             radial-gradient(120% 80% at 15% 50%,rgba(211,17,69,.16),transparent 60%)}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09) translate(1.5%,-1.5%)}}
+.wm{position:fixed;top:calc(15px + env(safe-area-inset-top));right:20px;z-index:20;font-weight:800;font-size:14px}
+.wm i{color:var(--red);font-style:normal}.wm .a{color:var(--red)}
+.pg{position:fixed;top:calc(15px + env(safe-area-inset-top));left:20px;z-index:20;color:var(--muted);font-size:13px;font-weight:700}
+/* effect #1 — blur-fade stagger */
+.on .rv{opacity:0;filter:blur(9px);transform:translateY(20px);animation:blurup .65s var(--spring) forwards}
+.on .rv:nth-child(1){animation-delay:.05s}.on .rv:nth-child(2){animation-delay:.14s}
+.on .rv:nth-child(3){animation-delay:.23s}.on .rv:nth-child(4){animation-delay:.32s}
+.on .rv:nth-child(5){animation-delay:.41s}.on .rv:nth-child(6){animation-delay:.5s}
+@keyframes blurup{to{opacity:1;filter:blur(0);transform:none}}
+.kick{color:var(--red);font-weight:800;letter-spacing:.24em;text-transform:uppercase;font-size:clamp(11px,1.5vh,13px)}
+h1{font-size:clamp(34px,8vw,74px);font-weight:900;line-height:1.02;letter-spacing:-.02em}
+h2{font-size:clamp(26px,5vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.01em}
+/* effect #4 — aurora gradient title word */
+.aurora{background:linear-gradient(92deg,var(--red),var(--salmon),var(--white),var(--red));
+  background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:aurora 7s linear infinite}
+@keyframes aurora{to{background-position:280% 0}}
+.sub{font-size:clamp(15px,2.4vh,20px);color:var(--muted);max-width:44ch;line-height:1.5}
+.bar{width:66px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--salmon))}
+.g{color:var(--gold)}.r{color:var(--red)}
+.grid{display:grid;gap:clamp(10px,1.8vh,16px)}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:16px;padding:clamp(15px,2.6vh,24px);
+  display:flex;flex-direction:column;gap:9px;backdrop-filter:blur(10px)}
+.card .n{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:900;background:rgba(211,17,69,.16);color:var(--red);font-size:17px}
+.card.gold{border-color:rgba(201,162,39,.4)}.card.gold .n{background:rgba(201,162,39,.16);color:var(--gold)}
+.card h3{font-size:clamp(17px,2.7vh,23px);font-weight:800;line-height:1.2}
+.card .say{font-size:clamp(12px,1.7vh,14px);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:clamp(8px,1.4vw,12px)}
+.chip{align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;
+  padding:9px 18px;font-weight:800;font-size:clamp(14px,2vh,18px);white-space:nowrap}
+.chip.r{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 26px rgba(211,17,69,.4)}
+.chip.pain{background:rgba(211,17,69,.12);border-color:rgba(211,17,69,.35)}
+.vs{display:flex;flex-direction:column;gap:clamp(12px,2.2vh,20px);max-width:20ch}
+.vs .row{background:rgba(255,255,255,.045);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:14px;
+  padding:clamp(15px,2.6vh,24px);font-size:clamp(19px,3.4vh,30px);font-weight:900}
+.vs .row.truth{border-left-color:var(--gold)}
+.vs .row small{display:block;color:var(--muted);font-weight:700;font-size:.5em;margin-top:5px}
+.one{font-size:clamp(28px,6.4vw,60px);font-weight:900;line-height:1.06;max-width:15ch;letter-spacing:-.01em}
+nav{position:fixed;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:9px;z-index:20}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);border:none;cursor:pointer;transition:.3s}
+.dot.on{background:var(--red);width:26px;border-radius:5px;box-shadow:0 0 12px rgba(211,17,69,.6)}
+/* effect #5 — progress bar */
+.prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--salmon));z-index:21;transition:width .4s var(--spring);box-shadow:0 0 10px rgba(211,17,69,.6)}
+.arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;z-index:20;display:grid;place-items:center}
+.arrow:hover{background:var(--red);border-color:var(--red)}#prev{left:14px}#next{right:14px}
+@media (max-width:680px){.g2,.g3{grid-template-columns:1fr}.arrow{display:none}
+  .slide{padding:64px 22px 74px}.slide.img::after{background:linear-gradient(180deg,rgba(20,20,24,.62),rgba(20,20,24,.94))}}
+@media (orientation:landscape) and (max-height:520px){.slide{padding:46px clamp(40px,6vw,80px) 52px;gap:9px}
+  h1{font-size:clamp(26px,6.4vh,44px)}h2{font-size:clamp(20px,5vh,32px)}.card{padding:10px 15px}.card .say{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.on .rv{opacity:1;filter:none;transform:none}}
 </style>
 </head>
 <body>
+<div class="prog" id="prog"></div>
+<div class="wm"><i>i</i>Agency<span class="a">AIA</span></div>
+<div class="pg"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div id="deck">
 
-<!-- ==================== SLIDE 1: COVER ==================== -->
-<div class="slide active "><div class="bar"></div>
-<div class="orb o-red" style="width:420px;height:420px;top:-140px;right:-80px"></div>
-<div class="orb o-gold" style="width:340px;height:340px;bottom:-100px;left:-60px"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z" style="display:flex;flex-direction:column;align-items:center;width:100%">
-<div class="kicker ai" style="text-transform:none">iTRAINING</div>
-<h1 class="big a d1" style="font-size:clamp(48px,7vw,104px)">T.N/6 <span class="accent">[TOPIC]</span></h1>
-<p class="sub a d2">[SUBTITLE LINE 1]<br>[SUBTITLE LINE 2]</p>
-<p class="hint a d3" style="color:#F5C518">&#3585;&#3604; &rarr; &#3627;&#3619;&#3639;&#3629; Spacebar &#3648;&#3614;&#3639;&#3656;&#3629;&#3648;&#3619;&#3636;&#3656;&#3617;</p>
-</div>
-<div class="sn">1/7</div>
-<div class="nav"><button onclick="go(1)">&rarr;</button></div>
-</div>
+<!-- COVER (image slide). Ken Burns bg + aurora title + number-ticker. Replace __IMG_COVER__ via inject. -->
+<section class="slide img" style="--bg:__IMG_COVER__">
+  <div class="kick rv">KICKER · <span data-tick="60">0</span> นาที</div>
+  <h1 class="rv">หัวเรื่องหลัก<br><span class="aurora">คำที่เน้น</span></h1>
+  <div class="bar rv"></div>
+  <div class="sub rv">ประโยคนำสั้นๆ หนึ่งบรรทัด</div>
+</section>
 
-<!-- ==================== SLIDE 2: SECTION HEADER (dark) ==================== -->
-<div class="slide "><div class="bar"></div>
-<div class="orb o-red" style="width:480px;height:480px;bottom:-170px;left:-120px"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z"><div class="kicker ai">Part 1</div>
-<h1 class="big a d1">[SECTION TITLE]</h1>
-<p class="sub a d2">[SECTION SUBTITLE]</p></div>
-<div class="sn">2/7</div>
-<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
-</div>
+<!-- CONTENT (dots, animated). chips 2-3 words, NOT paragraphs. -->
+<section class="slide dots">
+  <div class="kick rv">หมวด</div>
+  <h2 class="rv">หัวเรื่องสไลด์ · <span class="r"><span data-tick="3">0</span> ข้อ</span></h2>
+  <div class="grid g3 rv">
+    <div class="card"><div class="n">1</div><h3>หัวข้อสั้น</h3></div>
+    <div class="card"><div class="n">2</div><h3>หัวข้อสั้น</h3></div>
+    <div class="card"><div class="n">3</div><h3>หัวข้อสั้น</h3></div>
+  </div>
+</section>
 
-<!-- ==================== SLIDE 3: Q (light, interactive) ==================== -->
-<div class="slide light"><div class="bar"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z" style="display:flex;flex-direction:column;align-items:center;width:100%">
-<div class="orb o-red" style="width:520px;height:520px;top:-160px;right:-130px"></div>
-<div class="orb o-gold" style="width:480px;height:480px;bottom:-170px;left:-120px"></div>
-<div class="kicker ai">&#3588;&#3635;&#3606;&#3634;&#3617;&#3613;&#3638;&#3585;&#3588;&#3636;&#3604;</div>
-<h1 class="bq a d1">[QUESTION TEXT]?</h1>
-<div class="opts a d3">
-<div class="opt">&#128522; [Option A]</div>
-<div class="opt">&#128517; [Option B]</div>
-<div class="opt">&#129335; [Option C]</div>
-</div>
-<p class="hint ai d5">&#128172; [PROMPT e.g. &#3618;&#3585;&#3617;&#3639;&#3629;&#3648;&#3621;&#3639;&#3629;&#3585; 1 &#3586;&#3657;&#3629;, &#3652;&#3617;&#3656;&#3617;&#3637;&#3588;&#3635;&#3605;&#3629;&#3610;&#3612;&#3636;&#3604;]</p>
-</div>
-<div class="sn">3/7</div>
-<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
-</div>
+<!-- IMAGE CONTENT (people/scene). image bg + chips. -->
+<section class="slide img" style="--bg:__IMG_SCENE__">
+  <div class="kick rv">หมวด</div>
+  <h2 class="rv">หัวเรื่อง</h2>
+  <div class="chips rv"><span class="chip pain">chip 1</span><span class="chip pain">chip 2</span><span class="chip pain">chip 3</span></div>
+</section>
 
-<!-- ==================== SLIDE 4: R (dark, reveal) ==================== -->
-<div class="slide "><div class="bar"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z" style="display:flex;flex-direction:column;align-items:center;width:100%">
-<div class="orb o-red" style="width:520px;height:520px;top:-160px;left:-130px"></div>
-<div class="orb o-gold" style="width:460px;height:460px;bottom:-160px;right:-120px"></div>
-<div class="kicker ai">&#3648;&#3593;&#3621;&#3618;</div>
-<h1 class="bq a d1">[ANSWER HEADLINE]</h1>
-<p class="sub a d2">[EXPLANATION TEXT]</p>
-</div>
-<div class="sn">4/7</div>
-<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
-</div>
+<!-- VS (compare). gold on the winning side. -->
+<section class="slide dots">
+  <div class="kick rv">หัวใจ</div>
+  <h2 class="rv">ประโยคเปรียบเทียบ</h2>
+  <div class="vs rv">
+    <div class="row">ฝั่ง A<small>= คำอธิบายสั้น</small></div>
+    <div class="row truth">ฝั่ง B<span class="g"> เน้น</span><small>= คำอธิบายสั้น</small></div>
+  </div>
+</section>
 
-<!-- ==================== SLIDE 5: CONTENT (light, cards) ==================== -->
-<div class="slide light"><div class="bar"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z"><div class="kicker ai">[SECTION LABEL]</div>
-<h1 class="big a d1">[CONTENT TITLE]</h1></div>
-<div class="grid g2 z">
-<div class="glass card gl-red as d2"><h3>[Card A Title]</h3><p>[Card A content]</p></div>
-<div class="glass card gl-gold as d3"><h3>[Card B Title]</h3><p>[Card B content]</p></div>
-</div>
-<div class="sn">5/7</div>
-<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
-</div>
+<!-- TAKEAWAY (gold cards = the ONLY place gold as fill is allowed) -->
+<section class="slide dots">
+  <div class="kick rv">สรุป</div>
+  <h2 class="rv">สิ่งที่เอากลับบ้าน</h2>
+  <div class="grid g3 rv">
+    <div class="card gold"><div class="n">1</div><h3>ข้อสรุป</h3><span class="say">ขยายสั้นๆ</span></div>
+    <div class="card gold"><div class="n">2</div><h3>ข้อสรุป</h3><span class="say">ขยายสั้นๆ</span></div>
+    <div class="card gold"><div class="n">3</div><h3>ข้อสรุป</h3><span class="say">ขยายสั้นๆ</span></div>
+  </div>
+</section>
 
-<!-- ==================== SLIDE 6: CONTENT (dark, bullet list) ==================== -->
-<div class="slide "><div class="bar"></div>
-<div class="orb o-gold" style="width:400px;height:400px;top:-100px;right:-80px"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z" style="max-width:900px"><div class="kicker ai">[SECTION LABEL]</div>
-<h1 class="big a d1">[BULLET TITLE]</h1>
-<div class="glass card as d2" style="text-align:left;margin-top:24px">
-<ul style="list-style:none;padding:0;font-size:clamp(15px,1.5vw,20px);line-height:2.2">
-<li>&#10038; [Bullet 1]</li>
-<li>&#10038; [Bullet 2]</li>
-<li>&#10038; [Bullet 3]</li>
-</ul>
-</div></div>
-<div class="sn">6/7</div>
-<div class="nav"><button onclick="go(-1)">&larr;</button><button onclick="go(1)">&rarr;</button></div>
-</div>
+<!-- CLOSING (image slide, big one-liner) -->
+<section class="slide img" style="--bg:__IMG_CLOSING__">
+  <div class="kick rv">จำแค่ข้อเดียว</div>
+  <div class="one rv">ประโยคปิด<br><span class="aurora">คำที่เน้น</span></div>
+  <div class="bar rv"></div>
+</section>
 
-<!-- ==================== SLIDE 7: CLOSING ==================== -->
-<div class="slide "><div class="bar"></div>
-<div class="orb o-red" style="width:500px;height:500px;top:-180px;left:-120px"></div>
-<div class="orb o-gold" style="width:380px;height:380px;bottom:-140px;right:-80px"></div>
-<div style="position:absolute;top:20px;left:30px;z-index:8;text-align:left"><div style="font-size:19px;font-weight:800"><span style="color:#d31145">i</span><span class="lg-t">Agency</span><span style="color:#d31145">AIA</span></div><div style="font-size:10px;opacity:.6">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &#3621;&#3591;&#3617;&#3639;&#3629; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609;</div></div>
-<div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:12px;opacity:.4;z-index:8;white-space:nowrap">&copy; 2026 iAgencyAIA &middot; Confidential</div>
-<div class="z">
-<h1 class="big a d1" style="font-size:clamp(40px,6vw,90px)">[CLOSING LINE 1]<br><span class="accent">[CLOSING LINE 2]</span></h1>
-<p class="sub a d2">[CLOSING SUBTITLE]</p>
-<div class="mantra ai d5">&#3592;&#3619;&#3636;&#3591;&#3651;&#3592; &middot; &#3621;&#3591;&#3617;&#3639;&#3629; &middot; &#3629;&#3618;&#3641;&#3656;&#3604;&#3657;&#3623;&#3618;&#3585;&#3633;&#3609; &bull; iAgencyAIA.com</div>
 </div>
-<div class="sn">7/7</div>
-<div class="nav"><button onclick="go(-1)">&larr;</button></div>
-</div>
-
+<button class="arrow" id="prev">‹</button>
+<button class="arrow" id="next">›</button>
+<nav id="dots"></nav>
 <script>
-var c=0,s=document.querySelectorAll('.slide'),t=s.length;
-function sh(n){s.forEach(function(x){x.classList.remove('active')});var el=s[n];el.classList.add('active');var b=el.querySelector('.bar');if(b&&!b.getAttribute('style'))b.style.width=((n/(t-1))*100)+'%'}
-function go(d){c=Math.max(0,Math.min(t-1,c+d));sh(c)}
-document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(1)}if(e.key==='ArrowLeft'){e.preventDefault();go(-1)}if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()}});
-var tx=0;document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX});
-document.addEventListener('touchend',function(e){var d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(d<0?1:-1)});
+const slides=[...document.querySelectorAll('.slide')],dots=document.getElementById('dots'),
+  cur=document.getElementById('cur'),prog=document.getElementById('prog');
+document.getElementById('tot').textContent=slides.length;
+let i=0;
+slides.forEach((_,k)=>{const b=document.createElement('button');b.className='dot';b.onclick=()=>go(k);dots.appendChild(b)});
+const dot=[...dots.children];
+function tick(s){s.querySelectorAll('[data-tick]').forEach(el=>{const to=+el.dataset.tick;let t0=null;
+  const step=t=>{if(!t0)t0=t;const p=Math.min((t-t0)/600,1);el.textContent=Math.round((1-Math.pow(1-p,3))*to);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})}
+function go(n){i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  dot.forEach((d,k)=>d.classList.toggle('on',k===i));
+  cur.textContent=i+1;prog.style.width=((i+1)/slides.length*100)+'%';tick(slides[i])}
+document.getElementById('next').onclick=()=>go(i+1);document.getElementById('prev').onclick=()=>go(i-1);
+addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key))go(i+1);
+  if(['ArrowLeft','PageUp'].includes(e.key))go(i-1);if(e.key==='Home')go(0);if(e.key==='End')go(slides.length-1)});
+let x0=null;addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>48)go(i+(dx<0?1:-1));x0=null},{passive:true});
+go(0);
 </script>
-
 </body>
 </html>
