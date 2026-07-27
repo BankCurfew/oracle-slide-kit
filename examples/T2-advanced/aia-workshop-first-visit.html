@@ -30,8 +30,8 @@ body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;
 .slide.img::before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--bg);background-size:cover;background-position:center;
   animation:kenburns 26s ease-in-out infinite alternate}
 .slide.img::after{content:"";position:absolute;inset:0;z-index:1;
-  background:linear-gradient(90deg,rgba(18,18,22,.8) 0%,rgba(18,18,22,.46) 46%,rgba(18,18,22,.2) 100%),
-             radial-gradient(120% 80% at 15% 50%,rgba(211,17,69,.2),transparent 60%)}
+  background:linear-gradient(90deg,rgba(20,20,24,.96) 0%,rgba(20,20,24,.72) 42%,rgba(20,20,24,.28) 100%),
+             radial-gradient(120% 80% at 15% 50%,rgba(211,17,69,.16),transparent 60%)}
 @keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09) translate(1.5%,-1.5%)}}
 .wm{position:fixed;top:calc(15px + env(safe-area-inset-top));right:20px;z-index:20;font-weight:800;
   font-size:14px;letter-spacing:.01em}
@@ -90,7 +90,7 @@ nav{position:fixed;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom)
 .arrow:hover{background:var(--red);border-color:var(--red)}#prev{left:14px}#next{right:14px}
 @media (max-width:680px){.g2,.g3,.roles{grid-template-columns:1fr}.arrow{display:none}
   .slide{padding:60px 20px 74px}
-  .slide.img::after{background:linear-gradient(180deg,rgba(18,18,22,.72) 0%,rgba(18,18,22,.4) 32%,rgba(18,18,22,.42) 60%,rgba(18,18,22,.85) 100%)}
+  .slide.img::after{background:linear-gradient(180deg,rgba(20,20,24,.62),rgba(20,20,24,.94))}
   h1{font-size:clamp(32px,10vw,54px)}h2{font-size:clamp(24px,7.4vw,38px)}.chip{font-size:clamp(13px,3.6vw,16px);padding:8px 15px}}
 @media (orientation:landscape) and (max-height:520px){
   .slide{padding:46px clamp(40px,6vw,80px) 52px;gap:9px}
