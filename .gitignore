@@ -1,0 +1,20 @@
+# Security — NEVER in git
+*.env
+*.key
+*.pem
+*.p12
+*.credentials
+*.credentials.json
+*-token.txt
+*-tokens.json
+*-authcode.tmp
+security/
+secrets/
+
+# Runtime
+*.log
+*.pid
+*.lock
+__pycache__/
+node_modules/
+.DS_Store
