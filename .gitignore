@@ -8,6 +8,8 @@
 *-token.txt
 *-tokens.json
 *-authcode.tmp
+*creds*
+*token*
 security/
 secrets/
 
