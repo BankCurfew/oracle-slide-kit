@@ -1,0 +1,108 @@
+/*
+ * oracle-slide-kit / effects.css
+ * 4 opt-in CSS accent modules (additive -- does NOT change base template style)
+ * Usage: add class to element. e.g. <div class="card shine-border"> or <span class="gradient-text">
+ * Requires @property --ang from deck-template.html (already present).
+ * Spotlight-card requires 6-line JS (see bottom comment).
+ */
+
+/* ============================================================
+   A. SHINE BORDER -- animated conic-gradient border on cards
+   Usage: <div class="card shine-border">
+   ============================================================ */
+.shine-border {
+  position: relative;
+  z-index: 0;
+}
+.shine-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--ang), transparent 0%, #D31145 25%, #E8998D 40%, transparent 60%);
+  animation: shine-spin 3s linear infinite;
+  z-index: -1;
+}
+.shine-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  z-index: -1;
+}
+@keyframes shine-spin { to { --ang: 360deg } }
+
+/* ============================================================
+   B. TEXT REVEAL -- mask-wipe entrance (left to right)
+   Usage: <h1 class="text-reveal rv">  (combine with .rv for stagger)
+   Only animates when parent slide has .on
+   ============================================================ */
+.on .text-reveal {
+  animation: text-wipe 0.8s cubic-bezier(.22,1.2,.36,1) forwards;
+}
+@keyframes text-wipe {
+  from { clip-path: inset(0 100% 0 0); opacity: 0; }
+  to   { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+/* ============================================================
+   C. SPOTLIGHT CARD -- radial gradient follows mouse
+   Usage: <div class="card spotlight-card">
+   Requires JS: see comment at bottom of this file
+   ============================================================ */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card > .spot-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(400px circle at var(--mx, 50%) var(--my, 50%), rgba(211,17,69,0.08), transparent 60%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.spotlight-card:hover > .spot-glow {
+  opacity: 1;
+}
+
+/* ============================================================
+   D. GRADIENT TEXT -- shifting gradient on accent words
+   Usage: <span class="gradient-text">1.2 ล้าน</span>
+   ============================================================ */
+.gradient-text {
+  background: linear-gradient(135deg, #D31145, #E8998D, #C9A227);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: grad-shift 4s ease infinite;
+}
+@keyframes grad-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .shine-border::before { animation: none; background: var(--red); }
+  .on .text-reveal { animation: none; clip-path: none; opacity: 1; }
+  .gradient-text { animation: none; }
+}
+
+/*
+ * SPOTLIGHT-CARD JS (paste into <script> block):
+ *
+ * document.querySelectorAll('.spotlight-card').forEach(function(el) {
+ *   var g = document.createElement('div'); g.className = 'spot-glow'; el.appendChild(g);
+ *   el.addEventListener('mousemove', function(e) {
+ *     var r = el.getBoundingClientRect();
+ *     el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+ *     el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+ *   });
+ * });
+ */
