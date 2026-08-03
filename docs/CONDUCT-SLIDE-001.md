@@ -74,15 +74,91 @@ Cover (BG + aurora title + particles)
    - `100dvh` + `viewport-fit=cover` + `.slide{overflow-y:auto}` กัน clip
 3. เสิร์ฟผ่าน http ตอน render-verify (file:// ใน headless ไม่โหลด)
 4. **T142: ห้าม em-dash** ทุกที่ (ใช้ · : , แทน)
-5. ส่งมอบ: commit repo + chip `~/.maw/inbox/` + OneDrive `iAgencyAIA/iTraining-Slides/`
+5. **Thai badge/chip CSS (บังคับ)**: ป้ายหรือ badge ที่มีข้อความไทยต้องใช้:
+   ```css
+   .badge, .chip, .kicker {
+     line-height: 1.7;   /* ≥1.7 เสมอ สำหรับอักษรไทยที่มีสระบน+ล่าง */
+     height: auto;        /* ห้าม fixed height */
+     overflow: visible;   /* ห้าม hidden/clip */
+   }
+   ```
+   **Why**: บนมือถือ ข้อความไทยหายทั้งบรรทัดเพราะ line-height ต่ำเกินไป + overflow hidden ตัดสระ ในขณะที่จอคอมดูปกติ (แบงค์ จับได้ 2 ส.ค. 69, เกิดซ้ำในเด็คใหม่ 3 ส.ค.)
+6. ส่งมอบ: commit repo + chip `~/.maw/inbox/` + OneDrive `iAgencyAIA/iTraining-Slides/`
 
-## 5. Verify ก่อนส่ง (BoB gate)
+## 5. Verify ก่อนส่ง (BoB gate): Two-Sided Acceptance
 
-- [ ] Render-verify จริง 3 viewport: desktop 1280x720 · portrait 390x844 · landscape 844x390
-- [ ] Eyeball screenshot: text อ่านชัดบน BG, chip/badge ไม่ยืดเต็มจอ (`align-self:flex-start` บน flex-column), ไม่มี layout ล้น
+> **กฎ: เกณฑ์ต้องมีทั้ง 2 ด้านเสมอ** ทั้งสิ่งที่ต้องไม่มี (ข้อห้าม) และสิ่งที่ต้องยังอยู่ (ข้อบังคับ) พร้อมจำนวน
+> ไฟล์เปล่าผ่านเกณฑ์ที่มีแต่ข้อห้าม, เด็คที่หายไป 28 รูปผ่านเกณฑ์ที่ไม่นับของที่ต้องมี
+> Source: BoB audit 3 ส.ค. 69, เด็คข้อโต้แย้ง 6 รอบ 5 รอบเพราะ "ของใหม่ขาดสิ่งที่ของเดิมมี"
+
+### 5A. สิ่งที่ต้องไม่มี (MUST NOT)
+
+- [ ] em-dash / en-dash / double-hyphen: grep = 0 (T142)
+- [ ] gold นอก takeaway/success: grep สี #C9A227 เฉพาะ section ที่อนุญาต
+- [ ] CSS-in-JS: 0 occurrences
+- [ ] interactive button/form: 0
+- [ ] paragraph อธิบายบนสไลด์ (ผู้พูดเป็นคนเล่า): 0
+- [ ] ภาพคนที่ไม่ใช่เอเชีย/ไทย: 0
+
+### 5B. สิ่งที่ต้องยังอยู่ (MUST HAVE) พร้อมจำนวน
+
+- [ ] **หน้าปก (Cover)**: 1 หน้า มี aurora title + particles + BG image
+- [ ] **พื้นหลังภาพ**: ≥N หน้า (N คำนวณจากจำนวนสไลด์ที่ต้องมีภาพตาม brief)
+- [ ] **Wordmark iAgencyAIA**: ทุกสไลด์ (จำนวน = จำนวนสไลด์ทั้งหมด)
+- [ ] **เลขหน้า/progress**: คำนวณจาก JS (`document.querySelectorAll('.slide').length`) ห้ามพิมพ์ตายเป็นตัวเลข
+- [ ] **Part divider ขาว**: ตรงจำนวน Part ตาม brief (เช่น 4 Parts = 4 dividers)
+- [ ] **คำพูด/ข้อความตรงต้นฉบับ**: ตรวจนับจำนวนข้อความสำคัญ (เช่น 77/77 ประโยค)
+- [ ] **ภาพ data-URI**: ทุกรูป embed เป็น data-URI (ไม่มี external URL)
+- [ ] **Closing slide**: 1 หน้า มี marquee + particles + brand line
+- [ ] **กลไกซ่อนสไลด์ไกล**: `.slide.far { visibility: hidden }` ต้องมีครบ 3 จุด (CSS rule + JS add/remove class + initial state) ถ้าไม่มี Safari บนมือถือจะล่มเพราะวาดทุกสไลด์พร้อมกัน
+
+### 5C. Render Verify (3 viewports)
+
+- [ ] desktop 1280x720: text อ่านชัดบน BG, layout ไม่ล้น
+- [ ] portrait 390x844: font scale ด้วย vw, bento → 2 คอลัมน์
+- [ ] landscape 844x390: font scale ด้วย vh, fit จอเตี้ย
 - [ ] Screenshot ต้องถ่ายหลัง animation จบ (sleep ≥2s หลัง show)
-- [ ] gold ปรากฏเฉพาะ takeaway/success · em-dash grep = 0 · wordmark ครบทุกหน้า
+- [ ] **badge/chip ข้อความไทย**: ต้องตรวจบน mobile จริง (ดูข้อ 4.5)
 - [ ] Editor review (T142) + chip preview ส่งแบงค์
+
+---
+
+## 6. Brief ถาวร: ข้อมูลข้อเท็จจริงคำต่อคำ (Verbatim Facts Rule)
+
+> **ช่องว่างในบรีฟจะถูกเติมเสมอ** ถ้าเราไม่ระบุ คนถัดไปจะเติมด้วยสิ่งที่เขาคิดว่าน่าจะใช่
+> ข้อมูลทั่วไปอาจไม่เป็นไร แต่แหล่งที่มา/ตัวเลข/วันที่ คือการพูดแทนคนอื่น
+> Source: BoB lesson 3 ส.ค. 69, เหตุการณ์ คปภ. ที่ไม่เคยเป็นแหล่งข้อมูล
+
+### 6.1 ข้อมูลที่ต้องระบุคำต่อคำใน brief
+
+| ประเภท | ตัวอย่าง | ห้ามเว้น |
+|--------|---------|---------|
+| แหล่งที่มา (Source line) | "Source: สมาคมประกันชีวิตไทย, InfoQuest 1 ส.ค. 69" | ห้าม: "ใส่แหล่งที่มาด้วย" (ไม่บอกว่าอะไร) |
+| ตัวเลข/สถิติ | "เบี้ยรวม 341,523 ล้านบาท +4.57%" | ห้าม: "ใส่ตัวเลขจากข่าว" |
+| วันที่/ช่วงเวลา | "แคมเปญ 1 ถึง 31 สิงหาคม 2569" | ห้าม: "ใส่ช่วงเวลาแคมเปญ" |
+| ชื่อองค์กร/บุคคล | "ฝ่ายผลิตภัณฑ์ช่องทางตัวแทน (Agency Sales Propositions)" | ห้าม: "ใส่ชื่อฝ่าย" |
+
+### 6.2 Template brief สำหรับ dispatch (ห้ามเว้นช่องว่าง ถ้ายังไม่รู้จำนวน = ยังไม่พร้อมสั่งงาน)
+
+```
+TASK: [ชื่องาน]
+หัวข้อ: [headline คำต่อคำ]
+Badge: [badge text]
+ตัวเลข: [ทุกตัวเลข ระบุค่าจริง]
+SOURCE LINE (คำต่อคำ ห้ามเปลี่ยน): "[exact source text]"
+วันที่ข่าว: [วันที่ของ source]
+
+โครงสร้าง (ห้ามเว้น):
+  จำนวนสไลด์ทั้งหมด: [N]
+  จำนวนหน้าที่ต้องมีพื้นหลังภาพ: [N จาก M]
+  จำนวน Part divider: [N]
+  จำนวนภาพ data-URI: [N]
+  คำพูด/ข้อความสำคัญ: [N ข้อความ]
+
+ห้าม: em-dash/en-dash/double-hyphen (T142)
+```
+
+---
 
 ## Lessons ที่ฝังในมาตรฐานนี้
 
@@ -90,3 +166,8 @@ Cover (BG + aurora title + particles)
 - pw-cli session เก็บ CWD ตอน `open` → screenshot ลง `.playwright-cli/` ของ dir นั้น
 - emoji ใน headless = tofu แต่บนเครื่องจริงปกติ (ไม่ใช่ defect)
 - gold-discipline คือหัวใจ mood guide: ใช้พร่ำเพรื่อ = ทำลายความหมาย "Leader Gold"
+- Thai text ใน badge/chip ต้อง line-height ≥1.7 + height:auto + overflow:visible (แบงค์ จับ 2+3 ส.ค. 69: สระไทยหายบนมือถือ จอคอมดูปกติ)
+- เกณฑ์รับงานต้องมี 2 ด้าน: ของที่ต้องหาย + ของที่ต้องยังอยู่พร้อมจำนวน (BoB 3 ส.ค.: เด็คหายไป 28 รูปเพราะเกณฑ์มีแต่ข้อห้าม)
+- ข้อเท็จจริงใน brief ต้องคำต่อคำ ช่องว่างจะถูกเติม (BoB 3 ส.ค.: คปภ. ถูกเติมเพราะไม่ได้ระบุ source verbatim)
+- เลขหน้า/จำนวนสไลด์ต้องคำนวณจาก DOM ห้ามพิมพ์ตาย (BoB 3 ส.ค.: พื้นหลังกี่หน้าจากกี่หน้า)
+- ขนาดไฟล์ไม่ใช่สาเหตุที่เด็คล่ม: t56 หนัก 1,854KB เปิดได้ปกติ, t1 แค่ 54KB เคยล่ม ตัวแปรเดียวคือมีกลไกซ่อนสไลด์ `.far` หรือไม่ (BoB 3 ส.ค.: เดาผิดเรื่องขนาดไฟล์ครึ่งวัน สาเหตุจริงคือ Safari วาดทุกสไลด์พร้อมกันเมื่อไม่มี visibility:hidden)
