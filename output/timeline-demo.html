@@ -1,0 +1,498 @@
+<!doctype html>
+<!-- T2182 timeline slide demo · built from template/deck-template.html · components/timeline/ -->
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Timeline Slide Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800;900&family=Anuphan:wght@400;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Timeline slide (T2182) · step-driven port of 21st.dev "Product Timeline" (Hyperiux Vault).
+   Presets + look: Designer-Oracle output/t2182-timeline/PRESETS-AND-G1-SPEC.md
+   Rule: --tl-accent is a GRAPHIC colour only (line, stems, dots). Years use --tl-year. Never accent as text. */
+
+/* ---------- presets (every preset sets every token) ---------- */
+[data-tl-preset="aia-dark"],[data-tl-preset]:not([data-tl-preset="aia-light"]):not([data-tl-preset="wb-prestige"]){
+  --tl-bg:#1C1C21; --tl-text:#FFFFFF; --tl-muted:#B8AFA6; --tl-year:#E8998D;
+  --tl-accent:#D31145; --tl-dot-fill:#D31145; --tl-dot-ring:#D31145;
+  --tl-track:rgba(255,255,255,.14); --tl-highlight:#C9A227;
+  --tl-title-font:inherit; --tl-title-scale:1;
+}
+[data-tl-preset="aia-light"]{
+  --tl-bg:#FFFFFF; --tl-text:#1C1C21; --tl-muted:#5C5C66; --tl-year:#D31145;
+  --tl-accent:#D31145; --tl-dot-fill:#D31145; --tl-dot-ring:#D31145;
+  --tl-track:#E6E1DC; --tl-highlight:#D31145; /* no gold on white (2.42): highlight = filled red dot + bold */
+  --tl-title-font:inherit; --tl-title-scale:1;
+}
+[data-tl-preset="wb-prestige"]{
+  --tl-bg:#FDFCF9; --tl-text:#1A2A45; --tl-muted:#5A6478; --tl-year:#856A36;
+  --tl-accent:#856A36; --tl-dot-fill:#C1A368; --tl-dot-ring:#856A36;
+  --tl-track:#E8E4DC; --tl-highlight:#1A2A45;
+  --tl-title-font:"Cormorant Garamond","Anuphan",Georgia,serif; --tl-title-scale:1.12; /* Cormorant runs small: +10-15% */
+  font-family:"Anuphan",var(--font,sans-serif);
+}
+.slide.tl-slide{background:var(--tl-bg)}
+
+/* ---------- frame ---------- */
+.tl{--fs:clamp(15px,1.46vw,30px); /* 28px @1920 floor, scaled */
+  position:relative;flex:1 1 auto;min-height:0;width:100%;display:flex;flex-direction:column;
+  gap:clamp(10px,2.2vh,24px);font-size:var(--fs);color:var(--tl-text)}
+.tl-head{display:flex;flex-direction:column;gap:.35em}
+.tl-period{color:var(--tl-muted);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:1em}
+.tl-heading{font-family:var(--tl-title-font);color:var(--tl-text);font-weight:800;line-height:1.1;
+  font-size:calc(clamp(24px,3.4vw,52px) * var(--tl-title-scale))}
+.tl-view{position:relative;flex:1 1 auto;min-height:0;overflow:hidden;--fa:0px;--fb:0px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%)}
+/* soft edges only on a side that has content off screen (JS toggles), so text never ends in a hard cut */
+.tl-view.fade-a{--fa:9%}.tl-view.fade-b{--fb:9%}
+.tl-track{position:absolute;left:0;top:0;height:100%;will-change:transform}
+
+/* the line: grey track + accent fill that grows to the active milestone */
+.tl-line,.tl-fill{position:absolute;left:0;top:50%;height:2px;margin-top:-1px;border-radius:2px}
+.tl-line{width:100%;background:var(--tl-track)}
+.tl-fill{width:0;background:var(--tl-accent)}
+.tl-cap{position:absolute;left:0;top:50%;width:.5em;height:.5em;margin:-.25em 0 0 -.25em;border-radius:50%;background:var(--tl-accent)}
+
+/* ---------- milestone (landscape: alternating rows around the line) ---------- */
+.tl-m{position:absolute;left:calc(var(--tl-pad,1.4em) + var(--i) * var(--tl-step,30vw));width:var(--tl-col,40vw);
+  display:flex;flex-direction:column;gap:.3em;padding-left:1.1em}
+.tl-m[data-row="top"]{top:0;bottom:50%;justify-content:flex-start;padding-bottom:1em}
+.tl-m[data-row="bottom"]{top:50%;bottom:0;justify-content:flex-end;padding-top:1em}
+.tl-stem{position:absolute;left:0;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--tl-accent);border-radius:2px}
+.tl-m[data-row="top"] .tl-stem{transform-origin:50% 100%}
+.tl-m[data-row="bottom"] .tl-stem{transform-origin:50% 0}
+.tl-dot{position:absolute;left:0;width:.8em;height:.8em;margin:-.4em 0 0 -.4em;border-radius:50%;
+  background:var(--tl-dot-fill);box-shadow:0 0 0 2px var(--tl-dot-ring);outline:2px solid transparent;outline-offset:3px}
+.tl-m[data-row="top"] .tl-dot{top:0}
+.tl-m[data-row="bottom"] .tl-dot{top:100%}
+.tl-m.is-active .tl-dot{outline-color:color-mix(in srgb,var(--tl-accent) 30%,transparent)}
+.tl-m.is-hl .tl-dot{background:var(--tl-highlight);box-shadow:0 0 0 2px var(--tl-highlight)}
+
+.tl-year{color:var(--tl-year);font-weight:800;font-size:1.12em;line-height:1.15;letter-spacing:.02em}
+.tl-m.is-hl .tl-year{color:var(--tl-highlight)}
+.tl-title{font-family:var(--tl-title-font);color:var(--tl-text);font-weight:700;line-height:1.18;
+  font-size:calc(1.25em * var(--tl-title-scale))}
+.tl-text{color:var(--tl-muted);line-height:1.38;max-width:34em}
+/* Thai has no spaces: let the browser's dictionary break it, never split it ourselves */
+.tl-title,.tl-text{line-break:auto;word-break:normal;overflow-wrap:break-word}
+.tl-heading,.tl-title{text-wrap:balance} /* no one-word last line (Thai: "...การ / เงิน") */
+
+/* short landscape phones: size by height */
+@media (orientation:landscape) and (max-height:520px){
+  .tl{--fs:clamp(12.5px,3.4vh,16px);gap:6px}
+  .tl-heading{font-size:calc(clamp(18px,6vh,30px) * var(--tl-title-scale))}
+  .tl-m{gap:.18em}
+  .tl-text{line-height:1.3}
+}
+
+/* ---------- portrait phones: vertical timeline, line down the left ---------- */
+@media (max-width:680px){
+  .tl{--fs:15.5px}
+  .tl-heading{font-size:calc(clamp(24px,7vw,32px) * var(--tl-title-scale))}
+  .tl-track{width:100%;height:auto;display:flex;flex-direction:column;gap:1.5em;padding:.6em 0 .6em}
+  .tl-line,.tl-fill{top:0;left:.7em;width:2px;height:100%;margin:0 0 0 -1px}
+  .tl-fill{height:0}
+  .tl-cap{top:0;left:.7em;margin:-.25em 0 0 -.25em}
+  .tl-m,.tl-m[data-row]{position:relative;left:auto;top:auto;bottom:auto;width:auto;padding:0 0 0 2.1em;justify-content:flex-start}
+  .tl-stem{display:none}
+  .tl-view{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%);
+                   mask-image:linear-gradient(180deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%)}
+  .tl-view.fade-a{--fa:7%}.tl-view.fade-b{--fb:7%}
+  .tl-m[data-row] .tl-dot{top:.62em;left:.7em}
+}
+</style>
+<style>
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+:root{
+  --red:#D31145; --char:#1C1C21; --char2:#26262c; --salmon:#E8998D; --gold:#C9A227;
+  --white:#FFFFFF; --muted:#B8AFA6; --line:rgba(255,255,255,.12);
+  --spring:cubic-bezier(.22,1.2,.36,1);
+  --font:"Sarabun","Noto Sans Thai","Leelawadee UI",-apple-system,"Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;-webkit-font-smoothing:antialiased}
+#deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:clamp(26px,5.4vw,72px);gap:clamp(12px,2.4vh,26px);overflow-y:auto;background:var(--char)}
+.slide.on{display:flex}
+/* effect #10 · ANIMATED dot pattern (must drift, not static) */
+.slide.dots::after{content:"";position:absolute;inset:-26px;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;
+  animation:gridmove 14s linear infinite}
+@keyframes gridmove{to{background-position:26px 26px}}
+.slide>*{position:relative;z-index:2}
+/* effect #6 · Ken Burns on image bg */
+.slide.img::before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--bg);background-size:cover;background-position:center;
+  animation:kenburns 26s ease-in-out infinite alternate}
+.slide.img::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,rgba(20,20,24,.96) 0%,rgba(20,20,24,.72) 42%,rgba(20,20,24,.28) 100%),
+             radial-gradient(120% 80% at 15% 50%,rgba(211,17,69,.16),transparent 60%)}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09) translate(1.5%,-1.5%)}}
+.wm{position:fixed;top:calc(15px + env(safe-area-inset-top));right:20px;z-index:20;font-weight:800;font-size:14px}
+.wm i{color:var(--red);font-style:normal}.wm .a{color:var(--red)}
+.pg{position:fixed;top:calc(15px + env(safe-area-inset-top));left:20px;z-index:20;color:var(--muted);font-size:13px;font-weight:700}
+/* effect #1 · blur-fade stagger */
+.on .rv{opacity:0;filter:blur(9px);transform:translateY(20px);animation:blurup .65s var(--spring) forwards}
+.on .rv:nth-child(1){animation-delay:.05s}.on .rv:nth-child(2){animation-delay:.14s}
+.on .rv:nth-child(3){animation-delay:.23s}.on .rv:nth-child(4){animation-delay:.32s}
+.on .rv:nth-child(5){animation-delay:.41s}.on .rv:nth-child(6){animation-delay:.5s}
+@keyframes blurup{to{opacity:1;filter:blur(0);transform:none}}
+.kick{color:var(--red);font-weight:800;letter-spacing:.24em;text-transform:uppercase;font-size:clamp(11px,1.5vh,13px)}
+h1{font-size:clamp(34px,8vw,74px);font-weight:900;line-height:1.02;letter-spacing:-.02em}
+h2{font-size:clamp(26px,5vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.01em}
+/* effect #4 · aurora gradient title word */
+.aurora{background:linear-gradient(92deg,var(--red),var(--salmon),var(--white),var(--red));
+  background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:aurora 7s linear infinite}
+@keyframes aurora{to{background-position:280% 0}}
+.sub{font-size:clamp(15px,2.4vh,20px);color:var(--muted);max-width:44ch;line-height:1.5}
+.bar{width:66px;height:5px;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--salmon))}
+.g{color:var(--gold)}.r{color:var(--red)}
+.grid{display:grid;gap:clamp(10px,1.8vh,16px)}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:16px;padding:clamp(15px,2.6vh,24px);
+  display:flex;flex-direction:column;gap:9px;backdrop-filter:blur(10px)}
+.card .n{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-weight:900;background:rgba(211,17,69,.16);color:var(--red);font-size:17px}
+.card.gold{border-color:rgba(201,162,39,.4)}.card.gold .n{background:rgba(201,162,39,.16);color:var(--gold)}
+.card h3{font-size:clamp(17px,2.7vh,23px);font-weight:800;line-height:1.2}
+.card .say{font-size:clamp(12px,1.7vh,14px);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:clamp(8px,1.4vw,12px)}
+.chip{align-self:flex-start;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:999px;
+  padding:9px 18px;font-weight:800;font-size:clamp(14px,2vh,18px);white-space:nowrap}
+.chip.r{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 26px rgba(211,17,69,.4)}
+.chip.pain{background:rgba(211,17,69,.12);border-color:rgba(211,17,69,.35)}
+.vs{display:flex;flex-direction:column;gap:clamp(12px,2.2vh,20px);max-width:20ch}
+.vs .row{background:rgba(255,255,255,.045);border:1px solid var(--line);border-left:5px solid var(--red);border-radius:14px;
+  padding:clamp(15px,2.6vh,24px);font-size:clamp(19px,3.4vh,30px);font-weight:900}
+.vs .row.truth{border-left-color:var(--gold)}
+.vs .row small{display:block;color:var(--muted);font-weight:700;font-size:.5em;margin-top:5px}
+.one{font-size:clamp(28px,6.4vw,60px);font-weight:900;line-height:1.06;max-width:15ch;letter-spacing:-.01em}
+nav{position:fixed;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:9px;z-index:20}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);border:none;cursor:pointer;transition:.3s}
+.dot.on{background:var(--red);width:26px;border-radius:5px;box-shadow:0 0 12px rgba(211,17,69,.6)}
+/* effect #5 · progress bar */
+.prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--salmon));z-index:21;transition:width .4s var(--spring);box-shadow:0 0 10px rgba(211,17,69,.6)}
+.arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;z-index:20;display:grid;place-items:center}
+.arrow:hover{background:var(--red);border-color:var(--red)}#prev{left:14px}#next{right:14px}
+@media (max-width:680px){.g2,.g3{grid-template-columns:1fr}.arrow{display:none}
+  .slide{padding:64px 22px 74px}.slide.img::after{background:linear-gradient(180deg,rgba(20,20,24,.62),rgba(20,20,24,.94))}}
+@media (orientation:landscape) and (max-height:520px){.slide{padding:46px clamp(40px,6vw,80px) 52px;gap:9px}
+  h1{font-size:clamp(26px,6.4vh,44px)}h2{font-size:clamp(20px,5vh,32px)}.card{padding:10px 15px}.card .say{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}.on .rv{opacity:1;filter:none;transform:none}}
+/* demo only: overlays readable on the light slides */
+body[data-light] .wm,body[data-light] .pg{color:#1A2A45}body[data-light="wb"] .wm{display:none}
+body[data-light] .arrow{color:#1A2A45;border-color:rgba(26,42,69,.2);background:rgba(26,42,69,.05)}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<div class="wm"><i>i</i>Agency<span class="a">AIA</span></div>
+<div class="pg"><span id="cur">1</span> / <span id="tot">1</span></div>
+<div id="deck">
+
+<!-- COVER -->
+<section class="slide dots">
+  <div class="kick rv">T2182 · TIMELINE SLIDE</div>
+  <h1 class="rv">เส้นทาง<br><span class="aurora">การทำงาน</span></h1>
+  <div class="bar rv"></div>
+  <div class="sub rv">กด → หรือปัดเพื่อเปิดทีละช่วง</div>
+</section>
+
+<!-- TIMELINE · aia-dark (default for AIA decks) -->
+<section class="slide tl-slide" data-timeline data-tl-preset="aia-dark">
+  <script type="application/json">{"periodLabel": "2012 · 2026", "title": "เส้นทาง 14 ปี สู่ที่ปรึกษาการเงิน", "items": [{"year": "2012", "title": "Porsche Sales Advisor", "text": "AAS Auto Service (Porsche). The full sales cycle, from test drive to contract."}, {"year": "2013", "title": "Regional Sales", "text": "Bamrungkit Import. Regional sales strategy for steel cutting-disc products."}, {"year": "2015", "title": "Owner & Manager", "text": "Blackwood Bar & Restaurant. Strategy, budget, P&L and suppliers."}, {"year": "2017", "title": "Personal Assistant to Owner → CFO", "text": "The Verona Prachinburi hotel. Promoted from PA to Chief Financial Officer."}, {"year": "2020", "title": "CEO Assistant", "text": "Devas Legendary. Set up the joint venture that became Devas iPason."}, {"year": "2022", "title": "CEO", "text": "Devas iPason. Vision, strategy and growth plans for the new joint venture."}, {"year": "2026", "title": "ที่ปรึกษาการเงิน AIA และผู้นำทีมเอเจนซี", "text": "ให้คำปรึกษาแผนประกันชีวิตสุขภาพและการปกป้องความมั่งคั่งให้ลูกค้าพร้อมสร้างทีมที่ปรึกษารุ่นใหม่"}]}</script>
+</section>
+
+<!-- TIMELINE · wb-prestige (WealthBanks Prestige White) -->
+<section class="slide tl-slide" data-timeline data-tl-preset="wb-prestige" data-light="wb">
+  <script type="application/json">{"periodLabel": "2012 · 2026", "title": "Career Journey", "items": [{"year": "2012", "title": "Porsche Sales Advisor", "text": "AAS Auto Service (Porsche). The full sales cycle, from test drive to contract."}, {"year": "2013", "title": "Regional Sales", "text": "Bamrungkit Import. Regional sales strategy for steel cutting-disc products."}, {"year": "2015", "title": "Owner & Manager", "text": "Blackwood Bar & Restaurant. Strategy, budget, P&L and suppliers."}, {"year": "2017", "title": "Personal Assistant to Owner → CFO", "text": "The Verona Prachinburi hotel. Promoted from PA to Chief Financial Officer."}, {"year": "2020", "title": "CEO Assistant", "text": "Devas Legendary. Set up the joint venture that became Devas iPason."}, {"year": "2022", "title": "CEO", "text": "Devas iPason. Vision, strategy and growth plans for the new joint venture."}, {"year": "2026", "title": "ที่ปรึกษาการเงิน AIA และผู้นำทีมเอเจนซี", "text": "ให้คำปรึกษาแผนประกันชีวิตสุขภาพและการปกป้องความมั่งคั่งให้ลูกค้าพร้อมสร้างทีมที่ปรึกษารุ่นใหม่"}]}</script>
+</section>
+
+<!-- TIMELINE · aia-light (editorial white, spot check) -->
+<section class="slide tl-slide" data-timeline data-tl-preset="aia-light" data-light="aia">
+  <script type="application/json">{"periodLabel": "2012 · 2026", "title": "เส้นทาง 14 ปี สู่ที่ปรึกษาการเงิน", "items": [{"year": "2012", "title": "Porsche Sales Advisor", "text": "AAS Auto Service (Porsche). The full sales cycle, from test drive to contract."}, {"year": "2013", "title": "Regional Sales", "text": "Bamrungkit Import. Regional sales strategy for steel cutting-disc products."}, {"year": "2015", "title": "Owner & Manager", "text": "Blackwood Bar & Restaurant. Strategy, budget, P&L and suppliers."}, {"year": "2017", "title": "Personal Assistant to Owner → CFO", "text": "The Verona Prachinburi hotel. Promoted from PA to Chief Financial Officer."}, {"year": "2020", "title": "CEO Assistant", "text": "Devas Legendary. Set up the joint venture that became Devas iPason."}, {"year": "2022", "title": "CEO", "text": "Devas iPason. Vision, strategy and growth plans for the new joint venture."}, {"year": "2026", "title": "ที่ปรึกษาการเงิน AIA และผู้นำทีมเอเจนซี", "text": "ให้คำปรึกษาแผนประกันชีวิตสุขภาพและการปกป้องความมั่งคั่งให้ลูกค้าพร้อมสร้างทีมที่ปรึกษารุ่นใหม่"}]}</script>
+</section>
+
+<!-- CLOSING -->
+<section class="slide dots">
+  <div class="kick rv">จบเดโม</div>
+  <div class="one rv">ทุกก้าว<br><span class="aurora">มีที่มา</span></div>
+  <div class="bar rv"></div>
+</section>
+
+
+</div>
+<button class="arrow" id="prev">‹</button>
+<button class="arrow" id="next">›</button>
+<nav id="dots"></nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script>
+/* Timeline slide (T2182) · step-driven port of 21st.dev "Product Timeline" (Hyperiux Vault).
+   Needs GSAP 3.13.0 (cdnjs gsap.min.js). No ScrollTrigger, no SplitText: Thai is revealed per block, never split.
+
+   Use in a deck (template/deck-template.html has the stepper hook):
+     <section class="slide tl-slide" data-timeline data-tl-preset="aia-dark"> holding one
+       script tag of type application/json with
+       {"periodLabel":"2012 · 2026","title":"...","items":[
+         {"year":"2012","month":"","title":"...","text":"...","row":"top","highlight":false}]}
+     (see timeline-demo.html; this comment must never contain a closing script tag, the demo inlines this file)
+   Auto-mounts every [data-timeline] on load, or call TimelineSlide.mount(sectionEl, data).
+   Sets sectionEl.stepper = { next(), prev(), enter(dir) }:
+     step 0 = heading only · step k = milestones 1..k shown · next() returns false after the last one,
+     prev() returns false at step 0, enter(1) = step 0, enter(-1) = fully revealed.
+   Reduced motion (or no GSAP): every milestone shown, no tweens; steps only pan the track while
+   something is still off screen, then return false. */
+(function () {
+  'use strict';
+  const mq = (q) => window.matchMedia && window.matchMedia(q).matches;
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const THAI = /[\u0E00-\u0E7F]/;
+  const langOf = (s) => (THAI.test(s || '') ? 'th' : 'en');
+
+  function render(slide, data) {
+    const items = (data.items || []).map((it, k) => Object.assign({}, it, { row: it.row || (k % 2 ? 'bottom' : 'top') }));
+    const ms = items.map((it, k) => {
+      const when = [it.month, it.year].filter(Boolean).join(' ');
+      return '<div class="tl-m' + (it.highlight ? ' is-hl' : '') + '" data-row="' + (it.row === 'bottom' ? 'bottom' : 'top') + '" style="--i:' + k + '">' +
+        '<span class="tl-stem"></span><span class="tl-dot"></span>' +
+        '<div class="tl-year tl-b">' + esc(when) + '</div>' +
+        '<div class="tl-title tl-b" lang="' + langOf(it.title) + '">' + esc(it.title) + '</div>' +
+        (it.text ? '<div class="tl-text tl-b" lang="' + langOf(it.text) + '">' + esc(it.text) + '</div>' : '') +
+        '</div>';
+    }).join('');
+    const root = document.createElement('div');
+    root.className = 'tl';
+    root.innerHTML =
+      '<div class="tl-head">' +
+        (data.periodLabel ? '<div class="tl-period rv">' + esc(data.periodLabel) + '</div>' : '') +
+        (data.title ? '<h2 class="tl-heading rv" lang="' + langOf(data.title) + '">' + esc(data.title) + '</h2>' : '') +
+      '</div>' +
+      '<div class="tl-view"><div class="tl-track">' +
+        '<span class="tl-line"></span><span class="tl-fill"></span><span class="tl-cap"></span>' + ms +
+      '</div></div>';
+    slide.querySelectorAll('.tl').forEach((n) => n.remove());
+    slide.appendChild(root);
+    return { root, n: items.length };
+  }
+
+  function mount(slide, data) {
+    const { root, n } = render(slide, data);
+    const view = root.querySelector('.tl-view');
+    const track = root.querySelector('.tl-track');
+    const fill = root.querySelector('.tl-fill');
+    const ms = [...root.querySelectorAll('.tl-m')];
+    const part = ms.map((m) => ({ stem: m.querySelector('.tl-stem'), dot: m.querySelector('.tl-dot'), blocks: [...m.querySelectorAll('.tl-b')] }));
+    const g = window.gsap;
+    let step = 0;
+    let vert = false;
+    let live = []; // running tweens, finished instantly on the next input
+
+    const still = () => !g || mq('(prefers-reduced-motion: reduce)');
+
+    function layout() {
+      vert = mq('(max-width: 680px)');
+      if (vert) {
+        track.style.width = '';
+        root.style.removeProperty('--tl-step');
+        root.style.removeProperty('--tl-col');
+      } else {
+        const w = view.clientWidth;
+        const stepPx = w / 3.2; // about 3 milestones in view (designer font floor)
+        const col = stepPx * 1.75; // rows alternate, so a column may span ~2 steps
+        const pad = parseFloat(getComputedStyle(root).fontSize) * 1.4;
+        root.style.setProperty('--tl-step', stepPx + 'px');
+        root.style.setProperty('--tl-col', col + 'px');
+        root.style.setProperty('--tl-pad', pad + 'px');
+        track.style.width = Math.max(w, pad + (n - 1) * stepPx + col) + 'px';
+      }
+    }
+
+    // centre of milestone k's dot along the line, in track coordinates (-1 = start of line)
+    function anchor(k) {
+      if (k < 0) return 0;
+      const d = part[k].dot.getBoundingClientRect();
+      const t = track.getBoundingClientRect();
+      return vert ? d.top + d.height / 2 - t.top : d.left + d.width / 2 - t.left;
+    }
+    function viewSize() { return vert ? view.clientHeight : view.clientWidth; }
+    function trackSize() { return vert ? track.scrollHeight : track.offsetWidth; }
+    function offsetFor(k) {
+      const max = Math.max(0, trackSize() - viewSize());
+      return -Math.max(0, Math.min(max, anchor(k) - viewSize() * 0.4)); // active lands at ~40%, never past the ends
+    }
+
+    // soft edge on each side that still hides content (off = track offset, <= 0)
+    function edges(off) {
+      const max = Math.max(0, trackSize() - viewSize());
+      view.classList.toggle('fade-a', -off > 1);
+      view.classList.toggle('fade-b', -off < max - 1);
+    }
+
+    function finish() { live.forEach((t) => t.progress(1)); live = []; }
+
+    function setShown(k, on) {
+      const p = part[k];
+      if (g) {
+        g.set(p.stem, { scaleY: on ? 1 : 0 });
+        g.set(p.dot, { scale: on ? 1 : 0 });
+        g.set(p.blocks, { autoAlpha: on ? 1 : 0, y: on ? 0 : 12 });
+      } else {
+        [p.stem, p.dot, ...p.blocks].forEach((el) => { el.style.visibility = on ? '' : 'hidden'; });
+      }
+    }
+
+    function setActive(k) { ms.forEach((m, j) => m.classList.toggle('is-active', j === k && !still())); }
+
+    // move the track + grow the line so milestone k (index) is in view
+    function place(k, animate) {
+      const axis = vert ? 'y' : 'x';
+      const off = offsetFor(k);
+      const len = still() ? trackSize() : anchor(k);
+      const size = vert ? 'height' : 'width';
+      edges(off);
+      if (g) {
+        g.set(track, vert ? { x: 0 } : { y: 0 });
+        if (animate) {
+          live.push(g.to(track, { [axis]: off, duration: 0.55, ease: 'power2.inOut' }));
+          live.push(g.to(fill, { [size]: len, duration: 0.55, ease: 'power2.inOut' }));
+        } else {
+          g.set(track, { [axis]: off });
+          g.set(fill, { [size]: len });
+        }
+      } else {
+        track.style.transform = vert ? 'translateY(' + off + 'px)' : 'translateX(' + off + 'px)';
+        fill.style[size] = len + 'px';
+      }
+    }
+
+    function apply() {
+      for (let k = 0; k < n; k++) setShown(k, still() || k < step);
+      setActive(step - 1);
+      if (still()) panTo(pan); else place(step - 1, false);
+    }
+
+    // reduced motion / no GSAP: all milestones shown; a step pages the track by ~80% of the view
+    // while something is still off screen, then returns false so the deck moves on
+    let pan = 0;
+    function panMax() { return Math.max(0, trackSize() - viewSize()); }
+    function panTo(p) {
+      pan = Math.max(0, Math.min(panMax(), p));
+      edges(-pan);
+      const t = vert ? 'translateY(' + -pan + 'px)' : 'translateX(' + -pan + 'px)';
+      if (g) g.set(track, vert ? { x: 0, y: -pan } : { y: 0, x: -pan }); else track.style.transform = t;
+      const size = vert ? 'height' : 'width';
+      if (g) g.set(fill, { [size]: trackSize() }); else fill.style[size] = trackSize() + 'px';
+    }
+    function panBy(dir) {
+      const before = pan;
+      panTo(pan + dir * viewSize() * 0.8);
+      return Math.abs(pan - before) > 1;
+    }
+
+    function reveal(k) {
+      const p = part[k];
+      const t = g.timeline();
+      t.fromTo(p.stem, { scaleY: 0 }, { scaleY: 1, duration: 0.3, ease: 'power2.out' }, 0.15)
+        .fromTo(p.dot, { scale: 0 }, { scale: 1.12, duration: 0.14, ease: 'power2.out' }, 0.4)
+        .to(p.dot, { scale: 1, duration: 0.1, ease: 'power1.inOut' }, 0.54)
+        .fromTo(p.blocks, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.32, stagger: 0.06, ease: 'power2.out' }, 0.46);
+      live.push(t);
+    }
+    function conceal(k) {
+      const p = part[k];
+      const t = g.timeline();
+      t.to(p.blocks, { autoAlpha: 0, y: 12, duration: 0.2, stagger: { each: 0.04, from: 'end' }, ease: 'power2.in' }, 0)
+        .to(p.dot, { scale: 0, duration: 0.16, ease: 'power2.in' }, 0.12)
+        .to(p.stem, { scaleY: 0, duration: 0.2, ease: 'power2.in' }, 0.18);
+      live.push(t);
+    }
+
+    const stepper = {
+      next() {
+        finish();
+        if (still()) return panBy(1);
+        if (step >= n) return false;
+        step++;
+        setActive(step - 1);
+        place(step - 1, true);
+        reveal(step - 1);
+        return true;
+      },
+      prev() {
+        finish();
+        if (still()) return panBy(-1);
+        if (step <= 0) return false;
+        conceal(step - 1);
+        step--;
+        setActive(step - 1);
+        place(step - 1, true);
+        return true;
+      },
+      enter(dir) {
+        finish();
+        step = dir < 0 ? n : 0;
+        layout(); // the slide was display:none until now, so measure again
+        pan = dir < 0 ? Infinity : 0; // clamped in panTo
+        apply();
+      },
+      get step() { return step; },
+      get steps() { return n; },
+    };
+    slide.stepper = stepper;
+
+    layout();
+    apply();
+    let raf = 0;
+    const relayout = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { finish(); layout(); apply(); }); };
+    window.addEventListener('resize', relayout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
+    // measuring needs the slide on screen: re-apply when it becomes visible
+    if (window.ResizeObserver) new ResizeObserver(relayout).observe(view);
+    return stepper;
+  }
+
+  function autoMount() {
+    document.querySelectorAll('[data-timeline]').forEach((slide) => {
+      if (slide.stepper) return;
+      const src = slide.querySelector('script[type="application/json"]');
+      if (!src) return;
+      try { mount(slide, JSON.parse(src.textContent)); } catch (e) { console.error('[timeline-slide]', e); }
+    });
+  }
+
+  window.TimelineSlide = { mount, autoMount };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoMount);
+  else autoMount();
+})();
+</script>
+<script>
+const slides=[...document.querySelectorAll('.slide')],dots=document.getElementById('dots'),
+  cur=document.getElementById('cur'),prog=document.getElementById('prog');
+document.getElementById('tot').textContent=slides.length;
+let i=0;
+slides.forEach((_,k)=>{const b=document.createElement('button');b.className='dot';b.onclick=()=>go(k);dots.appendChild(b)});
+const dot=[...dots.children];
+function tick(s){s.querySelectorAll('[data-tick]').forEach(el=>{const to=+el.dataset.tick;let t0=null;
+  const step=t=>{if(!t0)t0=t;const p=Math.min((t-t0)/600,1);el.textContent=Math.round((1-Math.pow(1-p,3))*to);if(p<1)requestAnimationFrame(step)};requestAnimationFrame(step)})}
+function go(n){const was=i;i=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,k)=>s.classList.toggle('on',k===i));
+  dot.forEach((d,k)=>d.classList.toggle('on',k===i));
+  cur.textContent=i+1;prog.style.width=((i+1)/slides.length*100)+'%';tick(slides[i]);
+  /* STEPPER HOOK: a slide may carry el.stepper={next(),prev(),enter(dir)} (e.g. components/timeline).
+     Entering forward = its first step, backward = its last step. */
+  const s=slides[i].stepper;if(s&&(i!==was||n===was))s.enter(i>=was?1:-1)}
+/* every forward/back input goes through these two (keys, swipe, arrows): a stepper slide steps first */
+function fwd(){const s=slides[i].stepper;if(s&&s.next())return;go(i+1)}
+function back(){const s=slides[i].stepper;if(s&&s.prev())return;go(i-1)}
+document.getElementById('next').onclick=fwd;document.getElementById('prev').onclick=back;
+addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key))fwd();
+  if(['ArrowLeft','PageUp'].includes(e.key))back();if(e.key==='Home')go(0);if(e.key==='End')go(slides.length-1)});
+let x0=null;addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>48)(dx<0?fwd:back)();x0=null},{passive:true});
+go(0);
+/* demo only: mark light slides on <body> for the fixed overlays */
+new MutationObserver(()=>{const d=slides[i].dataset.light;if(d)document.body.dataset.light=d;else delete document.body.dataset.light}).observe(document.getElementById('deck'),{subtree:true,attributes:true,attributeFilter:['class']});
+</script>
+</body>
+</html>

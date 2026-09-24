@@ -1,28 +1,13 @@
 <!doctype html>
-<!--
-  iAgencyAIA DECK TEMPLATE · compliant starter (CONDUCT-SLIDE-001)
-  ================================================================
-  HOW TO USE
-  1. Copy this file → output/slides/<your-deck>.html
-  2. Read CONDUCT-SLIDE-001 first (output/sop/). AUDIENCE-FIRST: headline + question + chips ONLY, no paragraphs.
-  3. Scene/people slides → Designer gen Thai images (gemini-gen.sh) BEFORE writing HTML.
-  4. Image slides: put a marker like __IMG_COVER__ in `--bg:__IMG_COVER__`, then inject with:
-       python3 -c "import base64;h=open('deck.html').read();
-       h=h.replace('__IMG_COVER__',\"url('data:image/webp;base64,\"+base64.b64encode(open('img.webp','rb').read()).decode()+\"')\");
-       open('deck.html','w').write(h)"
-     (total embedded images < ~500KB; webp).
-  5. Motion is already wired (≥6 effects): Ken Burns, aurora title, number-ticker([data-tick]), blur-fade stagger(.rv),
-     animated dot-pattern(gridmove), progress+dots. Use `class="aurora"` on key title words, `data-tick="N"` on a count.
-  6. gold (#C9A227) ONLY on takeaway/success. wordmark on every slide (already fixed top-right).
-  7. Verify before deliver: render 3 viewports (desktop 1280x720 / portrait 390x844 / landscape 844x390),
-     em-dash grep = 0, Editor review. Deliver: commit + OneDrive `iAgencyAIA/iTraining-Slides/`.
-  Reference builds: t181-iagencyclub-sales-idea.html · aia-workshop-first-visit.html
--->
+<!-- T2182 timeline slide demo · built from template/deck-template.html · components/timeline/ -->
 <html lang="th">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>iAgencyAIA Deck</title>
+<title>Timeline Slide Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700;800;900&family=Anuphan:wght@400;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="timeline-slide.css">
 <style>
 @property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
 :root{
@@ -38,13 +23,13 @@ body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;
 .slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
   padding:clamp(26px,5.4vw,72px);gap:clamp(12px,2.4vh,26px);overflow-y:auto;background:var(--char)}
 .slide.on{display:flex}
-/* effect #10 — ANIMATED dot pattern (must drift, not static) */
+/* effect #10 · ANIMATED dot pattern (must drift, not static) */
 .slide.dots::after{content:"";position:absolute;inset:-26px;z-index:0;pointer-events:none;
   background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;
   animation:gridmove 14s linear infinite}
 @keyframes gridmove{to{background-position:26px 26px}}
 .slide>*{position:relative;z-index:2}
-/* effect #6 — Ken Burns on image bg */
+/* effect #6 · Ken Burns on image bg */
 .slide.img::before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--bg);background-size:cover;background-position:center;
   animation:kenburns 26s ease-in-out infinite alternate}
 .slide.img::after{content:"";position:absolute;inset:0;z-index:1;
@@ -54,7 +39,7 @@ body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;
 .wm{position:fixed;top:calc(15px + env(safe-area-inset-top));right:20px;z-index:20;font-weight:800;font-size:14px}
 .wm i{color:var(--red);font-style:normal}.wm .a{color:var(--red)}
 .pg{position:fixed;top:calc(15px + env(safe-area-inset-top));left:20px;z-index:20;color:var(--muted);font-size:13px;font-weight:700}
-/* effect #1 — blur-fade stagger */
+/* effect #1 · blur-fade stagger */
 .on .rv{opacity:0;filter:blur(9px);transform:translateY(20px);animation:blurup .65s var(--spring) forwards}
 .on .rv:nth-child(1){animation-delay:.05s}.on .rv:nth-child(2){animation-delay:.14s}
 .on .rv:nth-child(3){animation-delay:.23s}.on .rv:nth-child(4){animation-delay:.32s}
@@ -63,7 +48,7 @@ body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;
 .kick{color:var(--red);font-weight:800;letter-spacing:.24em;text-transform:uppercase;font-size:clamp(11px,1.5vh,13px)}
 h1{font-size:clamp(34px,8vw,74px);font-weight:900;line-height:1.02;letter-spacing:-.02em}
 h2{font-size:clamp(26px,5vw,46px);font-weight:900;line-height:1.1;letter-spacing:-.01em}
-/* effect #4 — aurora gradient title word */
+/* effect #4 · aurora gradient title word */
 .aurora{background:linear-gradient(92deg,var(--red),var(--salmon),var(--white),var(--red));
   background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:aurora 7s linear infinite}
 @keyframes aurora{to{background-position:280% 0}}
@@ -91,7 +76,7 @@ h2{font-size:clamp(26px,5vw,46px);font-weight:900;line-height:1.1;letter-spacing
 nav{position:fixed;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:9px;z-index:20}
 .dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);border:none;cursor:pointer;transition:.3s}
 .dot.on{background:var(--red);width:26px;border-radius:5px;box-shadow:0 0 12px rgba(211,17,69,.6)}
-/* effect #5 — progress bar */
+/* effect #5 · progress bar */
 .prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--salmon));z-index:21;transition:width .4s var(--spring);box-shadow:0 0 10px rgba(211,17,69,.6)}
 .arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;z-index:20;display:grid;place-items:center}
 .arrow:hover{background:var(--red);border-color:var(--red)}#prev{left:14px}#next{right:14px}
@@ -100,6 +85,9 @@ nav{position:fixed;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom)
 @media (orientation:landscape) and (max-height:520px){.slide{padding:46px clamp(40px,6vw,80px) 52px;gap:9px}
   h1{font-size:clamp(26px,6.4vh,44px)}h2{font-size:clamp(20px,5vh,32px)}.card{padding:10px 15px}.card .say{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}.on .rv{opacity:1;filter:none;transform:none}}
+/* demo only: overlays readable on the light slides */
+body[data-light] .wm,body[data-light] .pg{color:#1A2A45}body[data-light="wb"] .wm{display:none}
+body[data-light] .arrow{color:#1A2A45;border-color:rgba(26,42,69,.2);background:rgba(26,42,69,.05)}
 </style>
 </head>
 <body>
@@ -108,64 +96,43 @@ nav{position:fixed;left:0;right:0;bottom:calc(15px + env(safe-area-inset-bottom)
 <div class="pg"><span id="cur">1</span> / <span id="tot">1</span></div>
 <div id="deck">
 
-<!-- COVER (image slide). Ken Burns bg + aurora title + number-ticker. Replace __IMG_COVER__ via inject. -->
-<section class="slide img" style="--bg:__IMG_COVER__">
-  <div class="kick rv">KICKER · <span data-tick="60">0</span> นาที</div>
-  <h1 class="rv">หัวเรื่องหลัก<br><span class="aurora">คำที่เน้น</span></h1>
+<!-- COVER -->
+<section class="slide dots">
+  <div class="kick rv">T2182 · TIMELINE SLIDE</div>
+  <h1 class="rv">เส้นทาง<br><span class="aurora">การทำงาน</span></h1>
   <div class="bar rv"></div>
-  <div class="sub rv">ประโยคนำสั้นๆ หนึ่งบรรทัด</div>
+  <div class="sub rv">กด → หรือปัดเพื่อเปิดทีละช่วง</div>
 </section>
 
-<!-- CONTENT (dots, animated). chips 2-3 words, NOT paragraphs. -->
+<!-- TIMELINE · aia-dark (default for AIA decks) -->
+<section class="slide tl-slide" data-timeline data-tl-preset="aia-dark">
+  <script type="application/json">{"periodLabel": "2012 · 2026", "title": "เส้นทาง 14 ปี สู่ที่ปรึกษาการเงิน", "items": [{"year": "2012", "title": "Porsche Sales Advisor", "text": "AAS Auto Service (Porsche). The full sales cycle, from test drive to contract."}, {"year": "2013", "title": "Regional Sales", "text": "Bamrungkit Import. Regional sales strategy for steel cutting-disc products."}, {"year": "2015", "title": "Owner & Manager", "text": "Blackwood Bar & Restaurant. Strategy, budget, P&L and suppliers."}, {"year": "2017", "title": "Personal Assistant to Owner → CFO", "text": "The Verona Prachinburi hotel. Promoted from PA to Chief Financial Officer."}, {"year": "2020", "title": "CEO Assistant", "text": "Devas Legendary. Set up the joint venture that became Devas iPason."}, {"year": "2022", "title": "CEO", "text": "Devas iPason. Vision, strategy and growth plans for the new joint venture."}, {"year": "2026", "title": "ที่ปรึกษาการเงิน AIA และผู้นำทีมเอเจนซี", "text": "ให้คำปรึกษาแผนประกันชีวิตสุขภาพและการปกป้องความมั่งคั่งให้ลูกค้าพร้อมสร้างทีมที่ปรึกษารุ่นใหม่"}]}</script>
+</section>
+
+<!-- TIMELINE · wb-prestige (WealthBanks Prestige White) -->
+<section class="slide tl-slide" data-timeline data-tl-preset="wb-prestige" data-light="wb">
+  <script type="application/json">{"periodLabel": "2012 · 2026", "title": "Career Journey", "items": [{"year": "2012", "title": "Porsche Sales Advisor", "text": "AAS Auto Service (Porsche). The full sales cycle, from test drive to contract."}, {"year": "2013", "title": "Regional Sales", "text": "Bamrungkit Import. Regional sales strategy for steel cutting-disc products."}, {"year": "2015", "title": "Owner & Manager", "text": "Blackwood Bar & Restaurant. Strategy, budget, P&L and suppliers."}, {"year": "2017", "title": "Personal Assistant to Owner → CFO", "text": "The Verona Prachinburi hotel. Promoted from PA to Chief Financial Officer."}, {"year": "2020", "title": "CEO Assistant", "text": "Devas Legendary. Set up the joint venture that became Devas iPason."}, {"year": "2022", "title": "CEO", "text": "Devas iPason. Vision, strategy and growth plans for the new joint venture."}, {"year": "2026", "title": "ที่ปรึกษาการเงิน AIA และผู้นำทีมเอเจนซี", "text": "ให้คำปรึกษาแผนประกันชีวิตสุขภาพและการปกป้องความมั่งคั่งให้ลูกค้าพร้อมสร้างทีมที่ปรึกษารุ่นใหม่"}]}</script>
+</section>
+
+<!-- TIMELINE · aia-light (editorial white, spot check) -->
+<section class="slide tl-slide" data-timeline data-tl-preset="aia-light" data-light="aia">
+  <script type="application/json">{"periodLabel": "2012 · 2026", "title": "เส้นทาง 14 ปี สู่ที่ปรึกษาการเงิน", "items": [{"year": "2012", "title": "Porsche Sales Advisor", "text": "AAS Auto Service (Porsche). The full sales cycle, from test drive to contract."}, {"year": "2013", "title": "Regional Sales", "text": "Bamrungkit Import. Regional sales strategy for steel cutting-disc products."}, {"year": "2015", "title": "Owner & Manager", "text": "Blackwood Bar & Restaurant. Strategy, budget, P&L and suppliers."}, {"year": "2017", "title": "Personal Assistant to Owner → CFO", "text": "The Verona Prachinburi hotel. Promoted from PA to Chief Financial Officer."}, {"year": "2020", "title": "CEO Assistant", "text": "Devas Legendary. Set up the joint venture that became Devas iPason."}, {"year": "2022", "title": "CEO", "text": "Devas iPason. Vision, strategy and growth plans for the new joint venture."}, {"year": "2026", "title": "ที่ปรึกษาการเงิน AIA และผู้นำทีมเอเจนซี", "text": "ให้คำปรึกษาแผนประกันชีวิตสุขภาพและการปกป้องความมั่งคั่งให้ลูกค้าพร้อมสร้างทีมที่ปรึกษารุ่นใหม่"}]}</script>
+</section>
+
+<!-- CLOSING -->
 <section class="slide dots">
-  <div class="kick rv">หมวด</div>
-  <h2 class="rv">หัวเรื่องสไลด์ · <span class="r"><span data-tick="3">0</span> ข้อ</span></h2>
-  <div class="grid g3 rv">
-    <div class="card"><div class="n">1</div><h3>หัวข้อสั้น</h3></div>
-    <div class="card"><div class="n">2</div><h3>หัวข้อสั้น</h3></div>
-    <div class="card"><div class="n">3</div><h3>หัวข้อสั้น</h3></div>
-  </div>
-</section>
-
-<!-- IMAGE CONTENT (people/scene). image bg + chips. -->
-<section class="slide img" style="--bg:__IMG_SCENE__">
-  <div class="kick rv">หมวด</div>
-  <h2 class="rv">หัวเรื่อง</h2>
-  <div class="chips rv"><span class="chip pain">chip 1</span><span class="chip pain">chip 2</span><span class="chip pain">chip 3</span></div>
-</section>
-
-<!-- VS (compare). gold on the winning side. -->
-<section class="slide dots">
-  <div class="kick rv">หัวใจ</div>
-  <h2 class="rv">ประโยคเปรียบเทียบ</h2>
-  <div class="vs rv">
-    <div class="row">ฝั่ง A<small>= คำอธิบายสั้น</small></div>
-    <div class="row truth">ฝั่ง B<span class="g"> เน้น</span><small>= คำอธิบายสั้น</small></div>
-  </div>
-</section>
-
-<!-- TAKEAWAY (gold cards = the ONLY place gold as fill is allowed) -->
-<section class="slide dots">
-  <div class="kick rv">สรุป</div>
-  <h2 class="rv">สิ่งที่เอากลับบ้าน</h2>
-  <div class="grid g3 rv">
-    <div class="card gold"><div class="n">1</div><h3>ข้อสรุป</h3><span class="say">ขยายสั้นๆ</span></div>
-    <div class="card gold"><div class="n">2</div><h3>ข้อสรุป</h3><span class="say">ขยายสั้นๆ</span></div>
-    <div class="card gold"><div class="n">3</div><h3>ข้อสรุป</h3><span class="say">ขยายสั้นๆ</span></div>
-  </div>
-</section>
-
-<!-- CLOSING (image slide, big one-liner) -->
-<section class="slide img" style="--bg:__IMG_CLOSING__">
-  <div class="kick rv">จำแค่ข้อเดียว</div>
-  <div class="one rv">ประโยคปิด<br><span class="aurora">คำที่เน้น</span></div>
+  <div class="kick rv">จบเดโม</div>
+  <div class="one rv">ทุกก้าว<br><span class="aurora">มีที่มา</span></div>
   <div class="bar rv"></div>
 </section>
+
 
 </div>
 <button class="arrow" id="prev">‹</button>
 <button class="arrow" id="next">›</button>
 <nav id="dots"></nav>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="timeline-slide.js"></script>
 <script>
 const slides=[...document.querySelectorAll('.slide')],dots=document.getElementById('dots'),
   cur=document.getElementById('cur'),prog=document.getElementById('prog');
@@ -191,6 +158,8 @@ addEventListener('keydown',e=>{if(['ArrowRight',' ','PageDown'].includes(e.key))
 let x0=null;addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
 addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;if(Math.abs(dx)>48)(dx<0?fwd:back)();x0=null},{passive:true});
 go(0);
+/* demo only: mark light slides on <body> for the fixed overlays */
+new MutationObserver(()=>{const d=slides[i].dataset.light;if(d)document.body.dataset.light=d;else delete document.body.dataset.light}).observe(document.getElementById('deck'),{subtree:true,attributes:true,attributeFilter:['class']});
 </script>
 </body>
 </html>
