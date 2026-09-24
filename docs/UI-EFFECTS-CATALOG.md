@@ -41,6 +41,7 @@
 | **Avatar Circles** | Magic UI | speakers/closing | รูปวงซ้อน border แดง |
 | **Progressive Blur** | Magic UI | ขอบภาพ BG ละลายเข้าพื้น | mask-image linear-gradient |
 | **Gradient Mesh hero** | 21st.dev | divider ขาว: blob แดง/salmon เบลอเคลื่อนช้า | 2-3 radial-gradient blobs + keyframe |
+| **Timeline slide (step-driven)** | 21st.dev "Product Timeline" (Hyperiux), T2182 | career/history/roadmap: → เปิดทีละ milestone (เส้นโต → เสาขึ้น → จุดเด้ง → ข้อความ) · portrait = เส้นแนวตั้ง | `components/timeline/` (GSAP 3.13.0, ไม่ใช้ SplitText กับไทย) · ใช้ `slide.stepper` hook ใน template · presets aia-dark / aia-light / wb-prestige |
 | เดิมจาก v2 (คงไว้) | | Aurora Text, Number Ticker, Border Beam, Blur-Fade, Bento, Ken Burns, Particles, Marquee, Spotlight, Glass, Swipe, Dots nav | ✓ ทั้งหมด |
 
 ### ❌ ไม่ใช้ (เหตุผล)

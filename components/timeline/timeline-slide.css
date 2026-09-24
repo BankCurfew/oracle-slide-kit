@@ -1,0 +1,95 @@
+/* Timeline slide (T2182) · step-driven port of 21st.dev "Product Timeline" (Hyperiux Vault).
+   Presets + look: Designer-Oracle output/t2182-timeline/PRESETS-AND-G1-SPEC.md
+   Rule: --tl-accent is a GRAPHIC colour only (line, stems, dots). Years use --tl-year. Never accent as text. */
+
+/* ---------- presets (every preset sets every token) ---------- */
+[data-tl-preset="aia-dark"],[data-tl-preset]:not([data-tl-preset="aia-light"]):not([data-tl-preset="wb-prestige"]){
+  --tl-bg:#1C1C21; --tl-text:#FFFFFF; --tl-muted:#B8AFA6; --tl-year:#E8998D;
+  --tl-accent:#D31145; --tl-dot-fill:#D31145; --tl-dot-ring:#D31145;
+  --tl-track:rgba(255,255,255,.14); --tl-highlight:#C9A227;
+  --tl-title-font:inherit; --tl-title-scale:1;
+}
+[data-tl-preset="aia-light"]{
+  --tl-bg:#FFFFFF; --tl-text:#1C1C21; --tl-muted:#5C5C66; --tl-year:#D31145;
+  --tl-accent:#D31145; --tl-dot-fill:#D31145; --tl-dot-ring:#D31145;
+  --tl-track:#E6E1DC; --tl-highlight:#D31145; /* no gold on white (2.42): highlight = filled red dot + bold */
+  --tl-title-font:inherit; --tl-title-scale:1;
+}
+[data-tl-preset="wb-prestige"]{
+  --tl-bg:#FDFCF9; --tl-text:#1A2A45; --tl-muted:#5A6478; --tl-year:#856A36;
+  --tl-accent:#856A36; --tl-dot-fill:#C1A368; --tl-dot-ring:#856A36;
+  --tl-track:#E8E4DC; --tl-highlight:#1A2A45;
+  --tl-title-font:"Cormorant Garamond","Anuphan",Georgia,serif; --tl-title-scale:1.12; /* Cormorant runs small: +10-15% */
+  font-family:"Anuphan",var(--font,sans-serif);
+}
+.slide.tl-slide{background:var(--tl-bg)}
+
+/* ---------- frame ---------- */
+.tl{--fs:clamp(15px,1.46vw,30px); /* 28px @1920 floor, scaled */
+  position:relative;flex:1 1 auto;min-height:0;width:100%;display:flex;flex-direction:column;
+  gap:clamp(10px,2.2vh,24px);font-size:var(--fs);color:var(--tl-text)}
+.tl,.tl *{box-sizing:border-box} /* never rely on the host deck's reset */
+.tl-head{display:flex;flex-direction:column;gap:.35em}
+.tl-period{color:var(--tl-muted);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:1em}
+.tl-heading{font-family:var(--tl-title-font);color:var(--tl-text);font-weight:800;line-height:1.1;
+  font-size:calc(clamp(24px,3.4vw,52px) * var(--tl-title-scale))}
+.tl-view{position:relative;flex:1 1 auto;min-height:0;overflow:hidden;--fa:0px;--fb:0px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%)}
+/* soft edges only on a side that has content off screen (JS toggles), so text never ends in a hard cut */
+.tl-view.fade-a{--fa:9%}.tl-view.fade-b{--fb:9%}
+.tl-track{position:absolute;left:0;top:0;height:100%;will-change:transform}
+
+/* the line: grey track + accent fill that grows to the active milestone */
+.tl-line,.tl-fill{position:absolute;left:0;top:50%;height:2px;margin-top:-1px;border-radius:2px}
+.tl-line{width:100%;background:var(--tl-track)}
+.tl-fill{width:0;background:var(--tl-accent)}
+.tl-cap{position:absolute;left:0;top:50%;width:.5em;height:.5em;margin:-.25em 0 0 -.25em;border-radius:50%;background:var(--tl-accent)}
+
+/* ---------- milestone (landscape: alternating rows around the line) ---------- */
+.tl-m{position:absolute;left:calc(var(--tl-pad,1.4em) + var(--i) * var(--tl-step,30vw));width:var(--tl-col,40vw);
+  display:flex;flex-direction:column;gap:.3em;padding-left:1.1em}
+.tl-m[data-row="top"]{top:0;bottom:50%;justify-content:flex-start;padding-bottom:1em}
+.tl-m[data-row="bottom"]{top:50%;bottom:0;justify-content:flex-end;padding-top:1em}
+.tl-stem{position:absolute;left:0;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--tl-accent);border-radius:2px}
+.tl-m[data-row="top"] .tl-stem{transform-origin:50% 100%}
+.tl-m[data-row="bottom"] .tl-stem{transform-origin:50% 0}
+.tl-dot{position:absolute;left:0;width:.8em;height:.8em;margin:-.4em 0 0 -.4em;border-radius:50%;
+  background:var(--tl-dot-fill);box-shadow:0 0 0 2px var(--tl-dot-ring);outline:2px solid transparent;outline-offset:3px}
+.tl-m[data-row="top"] .tl-dot{top:0}
+.tl-m[data-row="bottom"] .tl-dot{top:100%}
+.tl-m.is-active .tl-dot{outline-color:color-mix(in srgb,var(--tl-accent) 30%,transparent)}
+.tl-m.is-hl .tl-dot{background:var(--tl-highlight);box-shadow:0 0 0 2px var(--tl-highlight)}
+
+.tl-year{color:var(--tl-year);font-weight:800;font-size:1.12em;line-height:1.15;letter-spacing:.02em}
+.tl-m.is-hl .tl-year{color:var(--tl-highlight)}
+.tl-title{font-family:var(--tl-title-font);color:var(--tl-text);font-weight:700;line-height:1.18;
+  font-size:calc(1.25em * var(--tl-title-scale))}
+.tl-text{color:var(--tl-muted);line-height:1.38;max-width:34em}
+/* Thai has no spaces: let the browser's dictionary break it, never split it ourselves */
+.tl-title,.tl-text{line-break:auto;word-break:normal;overflow-wrap:break-word}
+.tl-heading,.tl-title{text-wrap:balance} /* no one-word last line (Thai: "...การ / เงิน") */
+
+/* short landscape phones: size by height */
+@media (orientation:landscape) and (max-height:520px){
+  .tl{--fs:clamp(12.5px,3.4vh,16px);gap:6px}
+  .tl-heading{font-size:calc(clamp(18px,6vh,30px) * var(--tl-title-scale))}
+  .tl-m{gap:.18em}
+  .tl-text{line-height:1.3}
+}
+
+/* ---------- portrait phones: vertical timeline, line down the left ---------- */
+@media (max-width:680px){
+  .tl{--fs:15.5px}
+  .tl-heading{font-size:calc(clamp(24px,7vw,32px) * var(--tl-title-scale))}
+  .tl-track{width:100%;height:auto;display:flex;flex-direction:column;gap:1.5em;padding:.6em 0 .6em}
+  .tl-line,.tl-fill{top:0;left:.7em;width:2px;height:100%;margin:0 0 0 -1px}
+  .tl-fill{height:0}
+  .tl-cap{top:0;left:.7em;margin:-.25em 0 0 -.25em}
+  .tl-m,.tl-m[data-row]{position:relative;left:auto;top:auto;bottom:auto;width:auto;padding:0 0 0 2.1em;justify-content:flex-start}
+  .tl-stem{display:none}
+  .tl-view{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%);
+                   mask-image:linear-gradient(180deg,transparent 0,#000 var(--fa),#000 calc(100% - var(--fb)),transparent 100%)}
+  .tl-view.fade-a{--fa:7%}.tl-view.fade-b{--fb:7%}
+  .tl-m[data-row] .tl-dot{top:.62em;left:.7em}
+}
