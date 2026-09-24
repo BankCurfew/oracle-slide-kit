@@ -125,6 +125,14 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
 .chips{display:flex;flex-wrap:wrap;gap:.55em}
 .chip{border:1px solid rgba(232,153,141,.4);background:rgba(232,153,141,.08);border-radius:999px;padding:.4em 1em;font-weight:700;white-space:nowrap}
 .prompt{color:var(--muted);font-weight:700}
+/* G1 R1: on a room screen the question is the hero (the slide the whole room reads). Landscape only;
+   portrait + short landscape keep their own sizes. */
+@media (min-width:681px) and (min-height:521px){
+  .slide.q{justify-content:center;gap:clamp(12px,3vh,36px)}
+  .slide.q .qtext{font-size:clamp(40px,min(5.6vw,10.4vh),110px);line-height:1.2}
+  .slide.q .kick{font-size:1.3em}
+  .slide.q .chips,.slide.q .prompt,.slide.q .sub{font-size:clamp(20px,min(1.9vw,3.4vh),38px)}
+}
 
 /* ---------- answer cards (21st 26797 spotlight grid + 1567 glowing effect; red/salmon, never gold) ---------- */
 .grid{display:grid;gap:clamp(8px,1.6vw,18px);width:100%}
