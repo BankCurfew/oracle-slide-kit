@@ -1,0 +1,271 @@
+/* iTraining series deck (T1-T6) · T2194 · CONDUCT-SLIDE-001 v1.3
+   Art direction: Designer-Oracle output/t2194-mindset/ART-DIRECTION.md
+   Colour rules: red #D31145 as TEXT only on white slides; on charcoal red = bars/lines/big numbers,
+   emphasis text = salmon. Gold #C9A227 only on the takeaway slide (.quote). Thai is never split mid-word. */
+@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
+:root{
+  --red:#D31145; --char:#1C1C21; --char2:#26262c; --salmon:#E8998D; --gold:#C9A227;
+  --white:#FFFFFF; --muted:#B8AFA6; --ink:#1C1C21; --ink2:#5C5C66; --line:rgba(255,255,255,.12);
+  --spring:cubic-bezier(.22,1.2,.36,1);
+  --font:"Sarabun","Noto Sans Thai","Leelawadee UI",-apple-system,"Segoe UI",sans-serif,"Noto Color Emoji";
+  /* type scale: 28px @1920 floor (= 18.7 @1280); portrait + short landscape below */
+  --fs:clamp(15px,min(1.46vw,2.6vh),30px);
+  --pad:clamp(26px,5vw,72px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--font);background:#000;color:var(--white);overflow:hidden;-webkit-font-smoothing:antialiased;font-size:var(--fs)}
+#deck{position:fixed;inset:0;height:100dvh;outline:none}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:calc(var(--pad) * .8) var(--pad);gap:clamp(8px,2vh,22px);overflow:hidden;background:var(--char)}
+.slide.on{display:flex}
+.slide>*{position:relative;z-index:2}
+.r{color:var(--salmon)}
+b{font-weight:800}
+
+/* ---------- chrome ---------- */
+.prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--salmon));z-index:30;transition:width .5s}
+.wm{position:fixed;top:calc(14px + env(safe-area-inset-top));right:20px;z-index:20;font-weight:800;font-size:14px;letter-spacing:.01em}
+.wm i{color:var(--red);font-style:normal}.wm .a{color:var(--red)}
+.pg{position:fixed;top:calc(14px + env(safe-area-inset-top));left:20px;z-index:20;color:var(--muted);font-size:13px;font-weight:700}
+.arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.06);border:1px solid var(--line);color:#fff;
+  width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;z-index:20;display:grid;place-items:center}
+.arrow:hover{background:var(--red);border-color:var(--red)}#prev{left:12px}#next{right:12px}
+#dots{position:fixed;bottom:calc(10px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:20}
+#dots .dot{width:6px;height:6px;border-radius:3px;border:0;background:rgba(255,255,255,.22);cursor:pointer;transition:width .3s,background .3s}
+#dots .dot.on{width:18px;background:var(--red)}
+body.light .wm,body.light .pg{color:var(--ink)}
+body.light .arrow{color:var(--ink);border-color:rgba(28,28,33,.16);background:rgba(28,28,33,.04)}
+body.light #dots .dot{background:rgba(28,28,33,.18)}body.light #dots .dot.on{background:var(--red)}
+
+/* ---------- shared text ---------- */
+.kick{color:var(--salmon);font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:1em}
+h1{font-size:clamp(40px,min(9vw,13vh),110px);font-weight:900;line-height:1.02;letter-spacing:-.02em}
+h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;letter-spacing:-.005em;text-wrap:balance}
+.sub{color:var(--muted);line-height:1.5;max-width:52ch}
+.lead{font-size:1.35em;font-weight:700}
+.bar{width:72px;height:4px;border-radius:2px;background:var(--red)}
+.foot{border-left:4px solid var(--red);padding:.35em 0 .35em .8em;font-weight:700;line-height:1.45;max-width:62ch}
+.intro{color:var(--muted);font-weight:700}
+.aurora{background:linear-gradient(90deg,var(--salmon),#fff 45%,var(--salmon) 90%);background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:aur 6s linear infinite}
+@keyframes aur{to{background-position:-200% 0}}
+
+/* ---------- backgrounds ---------- */
+.slide.img::before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--bg);background-size:cover;background-position:center;
+  animation:kenburns 26s ease-in-out infinite alternate}
+.slide.img::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,rgba(28,28,33,.97) 0%,rgba(28,28,33,.84) 48%,rgba(28,28,33,.5) 100%),
+             radial-gradient(120% 80% at 15% 50%,rgba(211,17,69,.16),transparent 60%)}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.08) translate(1.4%,-1.4%)}}
+.slide.dots::after{content:"";position:absolute;inset:-26px;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:26px 26px;animation:gridmove 14s linear infinite}
+@keyframes gridmove{to{background-position:26px 26px}}
+
+/* ---------- reveal on enter (blur-fade stagger) ---------- */
+.on .rv{opacity:0;filter:blur(8px);transform:translateY(18px);animation:blurup .65s var(--spring) forwards}
+.on .rv:nth-child(1){animation-delay:.04s}.on .rv:nth-child(2){animation-delay:.12s}.on .rv:nth-child(3){animation-delay:.2s}
+.on .rv:nth-child(4){animation-delay:.28s}.on .rv:nth-child(5){animation-delay:.36s}.on .rv:nth-child(6){animation-delay:.44s}
+.on .rv:nth-child(n+7){animation-delay:.5s}
+@keyframes blurup{to{opacity:1;filter:none;transform:none}}
+
+/* 21st 19257 Text Reveal (Mask): each <br> line rises out of its own mask. Whole lines only (Thai never split).
+   The mask has vertical room so Thai upper/lower marks are never clipped. */
+.ml{display:block;overflow:hidden;padding:.24em .06em .2em;margin:-.24em -.06em -.2em}
+.ml>.mi{display:block}
+.on .mask .mi{transform:translateY(112%);animation:maskup .9s cubic-bezier(.2,.8,.2,1) forwards}
+.on .mask .ml:nth-child(2) .mi{animation-delay:.12s}.on .mask .ml:nth-child(3) .mi{animation-delay:.24s}
+@keyframes maskup{to{transform:none}}
+.on .mask.rv{filter:none;transform:none} /* the mask is the focal motion; no blur on top */
+
+/* ---------- cover (21st 989 Spotlight) ---------- */
+.cover .kick{letter-spacing:.28em}
+.cover::after{background:linear-gradient(90deg,rgba(28,28,33,.96) 0%,rgba(28,28,33,.7) 55%,rgba(28,28,33,.35) 100%)!important}
+.spot-light{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.9;
+  background:radial-gradient(560px circle at var(--mx,30%) var(--my,40%),rgba(211,17,69,.24),rgba(232,153,141,.06) 40%,transparent 62%);
+  transition:background .08s}
+.hint{color:var(--muted);margin-top:.6em}
+
+/* ---------- part divider + notes (WHITE editorial) ---------- */
+.slide.part{background:var(--white);color:var(--ink)}
+.slide.part .kick{color:var(--red)}
+.slide.part .r{color:var(--red)}
+.slide.part h2{font-size:clamp(30px,min(5vw,8.4vh),76px);max-width:15ch}
+.pnum{position:absolute;right:calc(var(--pad) * .8);top:50%;transform:translateY(-54%) rotate(-3deg);z-index:1;
+  font-size:clamp(160px,min(34vw,60vh),520px);font-weight:900;line-height:.8;color:var(--red);opacity:.95;letter-spacing:-.06em}
+.skew{width:min(260px,40vw);height:14px;background:var(--red);transform:skewX(-24deg);margin-top:.3em}
+.psub{color:var(--ink2);font-weight:700;font-size:1.15em}
+/* 21st 1536 Card with Grid Pattern: notes pages */
+.slide.notes{background-color:var(--white);
+  background-image:linear-gradient(rgba(28,28,33,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(28,28,33,.045) 1px,transparent 1px);
+  background-size:28px 28px}
+.slide.notes h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);max-width:none}
+.nls{display:flex;flex-direction:column;gap:clamp(10px,3vh,34px);max-width:1100px;width:100%}
+.nl{display:flex;flex-direction:column;gap:.35em}
+.nl span{font-weight:700;color:var(--ink)}
+.nl i{display:block;height:clamp(22px,5vh,44px);border-bottom:2px solid rgba(28,28,33,.28)}
+.chip.lt{background:rgba(211,17,69,.07);border-color:rgba(211,17,69,.3);color:var(--ink)}
+.tip{color:var(--ink2);line-height:1.45;max-width:80ch}
+.lrs{display:grid;grid-template-columns:1fr 1fr;gap:.5em 2.2em;width:100%}
+.lr{display:flex;align-items:flex-end;gap:.45em;color:var(--ink2);white-space:nowrap}
+.lr b{color:var(--red);min-width:1.6em}
+.lr i{flex:2;border-bottom:1.5px solid rgba(28,28,33,.3);height:1.2em}.lr i.s{flex:1}
+
+/* ---------- question ---------- */
+.qtext{font-size:clamp(28px,min(4.2vw,7.6vh),68px)}
+.chips{display:flex;flex-wrap:wrap;gap:.55em}
+.chip{border:1px solid rgba(232,153,141,.4);background:rgba(232,153,141,.08);border-radius:999px;padding:.4em 1em;font-weight:700;white-space:nowrap}
+.prompt{color:var(--muted);font-weight:700}
+
+/* ---------- answer cards (21st 26797 spotlight grid + 1567 glowing effect; red/salmon, never gold) ---------- */
+.grid{display:grid;gap:clamp(8px,1.6vw,18px);width:100%}
+.grid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.c3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{position:relative;border-radius:16px;padding:clamp(10px,1.8vh,20px) clamp(12px,1.5vw,22px);background:rgba(38,38,44,.78);
+  border:1px solid rgba(255,255,255,.1);display:flex;flex-direction:column;gap:.3em;overflow:hidden;isolation:isolate}
+.card.spot::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(320px circle at var(--mx,50%) var(--my,50%),rgba(232,153,141,.14),transparent 60%)}
+.card.spot:hover::before{opacity:1}
+/* glowing border: a conic ring that sweeps once when the slide enters (touch) or follows hover (desktop) */
+.card.spot::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;z-index:-1;pointer-events:none;opacity:0;
+  background:conic-gradient(from var(--ang),transparent 0 60%,var(--red) 75%,var(--salmon) 85%,transparent 95%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.on .card.spot::after{animation:glow 1.6s ease-out forwards;animation-delay:calc(.5s + var(--ci,0) * .18s)}
+.card.spot:hover::after{opacity:1;animation:spin 3s linear infinite}
+@keyframes glow{0%{opacity:0;--ang:0deg}25%{opacity:1}100%{opacity:0;--ang:360deg}}
+@keyframes spin{to{--ang:360deg}}
+.ct{font-weight:800;font-size:1.12em;line-height:1.25}
+.cd{line-height:1.42}
+.cd.dim,.card.dim .cd{color:var(--muted)}
+.card.dim{opacity:.72}
+.cq{color:var(--salmon);font-weight:700;font-style:italic;line-height:1.4}
+.fix{color:#fff;line-height:1.42;font-weight:600}
+.card .n{width:1.9em;height:1.9em;border-radius:9px;display:grid;place-items:center;font-weight:900;background:rgba(211,17,69,.18);color:var(--salmon)}
+.card.narrow{max-width:640px}
+.vs{display:flex;flex-direction:column;gap:.5em;width:100%;max-width:980px}
+.vs .row{border:1px solid var(--line);border-radius:14px;padding:.6em .9em;font-size:1.3em;font-weight:900;background:rgba(38,38,44,.7);line-height:1.3}
+.vs .row small{display:block;color:var(--muted);font-weight:700;font-size:.78em;margin-top:.25em}
+.wrapbox{border:1.5px dashed rgba(232,153,141,.5);border-radius:20px;padding:clamp(10px,1.6vh,18px);display:flex;flex-direction:column;gap:.7em;width:100%}
+.wraplabel{font-weight:800;color:var(--salmon);text-align:center}
+/* 21st 26826 Comparison: the recommended side is marked */
+.appr .card{justify-content:flex-start}
+.card.star{border:1.5px solid var(--red);background:linear-gradient(160deg,rgba(211,17,69,.16),rgba(38,38,44,.85) 55%);
+  box-shadow:0 0 0 4px rgba(211,17,69,.12)}
+.appr .card:not(.star){opacity:.86}
+.evo{display:flex;flex-wrap:wrap;align-items:center;gap:.45em;font-weight:700}
+.evo span{border:1px solid var(--line);border-radius:999px;padding:.25em .8em;color:var(--muted)}
+.evo span.on{border-color:var(--red);color:#fff;background:rgba(211,17,69,.2)}
+.evo b{color:var(--salmon)}
+
+/* ---------- break (light rays) ---------- */
+.brk{align-items:center;text-align:center}
+.brk .sub{margin:0 auto}
+.cup{font-size:clamp(54px,12vh,110px);line-height:1}
+.brk .rays{position:absolute;inset:-20%;z-index:1;pointer-events:none;opacity:.5;
+  background:repeating-conic-gradient(from 200deg at 50% -10%,rgba(255,255,255,.07) 0 4deg,transparent 4deg 14deg);
+  -webkit-mask:radial-gradient(70% 70% at 50% 0,#000,transparent 75%);mask:radial-gradient(70% 70% at 50% 0,#000,transparent 75%);
+  animation:rays 12s ease-in-out infinite alternate}
+@keyframes rays{to{transform:rotate(6deg)}}
+
+/* ---------- work cycle: RING on the stepper (landscape) · vertical stepper (portrait) ---------- */
+.cycwrap{position:relative;width:min(56vh,46vw);aspect-ratio:1;align-self:center;margin:.2em 0}
+.cyc{align-items:flex-start}
+.cyc .cycwrap{align-self:center}
+.ring-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ring-svg .trk{fill:none;stroke:rgba(255,255,255,.12);stroke-width:2}
+.ring-svg .arc{fill:none;stroke:var(--red);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1)}
+.ring-svg .loop{fill:none;stroke:var(--salmon);stroke-width:2.5;stroke-dasharray:6 6;opacity:0;transition:opacity .5s}
+.cyc.done .ring-svg .loop{opacity:1}
+.ring{list-style:none;position:absolute;inset:0}
+.ring li{position:absolute;left:50%;top:50%;width:0;height:0;
+  --a:calc(var(--k) * 60deg - 90deg)}
+.ring li>.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:.25em;text-align:center;
+  left:calc(cos(var(--a)) * var(--rr));top:calc(sin(var(--a)) * var(--rr));width:9em;
+  opacity:.14;transition:opacity .4s,transform .45s var(--spring)}
+.cycwrap{--rr:calc(min(56vh,46vw) / 2)}
+.ring li.on>.node{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.ring li.cur>.node .rn{box-shadow:0 0 0 5px rgba(211,17,69,.3)}
+.rn{width:2.1em;height:2.1em;border-radius:50%;background:var(--red);color:#fff;font-weight:900;display:grid;place-items:center;flex:none}
+.rt{font-weight:800;line-height:1.2;background:rgba(28,28,33,.85);padding:.1em .35em;border-radius:6px}
+.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:clamp(34px,7vh,64px);transition:transform 1s}
+.cyc.done .hub{transform:translate(-50%,-50%) rotate(360deg)}
+.cyc .after{opacity:0;transition:opacity .5s}
+.cyc.done .after{opacity:1}
+
+/* ---------- takeaway quote (21st 9386 Reading Text Reveal) · the ONLY gold slide ---------- */
+.kick.g{color:var(--gold)}
+.gold{color:var(--gold)}
+.bar.gbar{background:var(--gold)}
+.one{font-size:clamp(28px,min(4.4vw,7.8vh),70px);font-weight:900;line-height:1.2;max-width:22ch}
+.one .w{opacity:.2;transition:opacity .35s}
+.on .one .w{animation:lit .4s ease forwards;animation-delay:calc(.35s + var(--w) * 90ms)}
+@keyframes lit{to{opacity:1}}
+
+/* ---------- close (21st 664 Background Circles) ---------- */
+.close .circles{position:absolute;right:-8vw;top:50%;width:min(70vh,60vw);aspect-ratio:1;transform:translateY(-50%);z-index:1;pointer-events:none}
+.close .circles i{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(211,17,69,.35);animation:ripple 6s ease-out infinite}
+.close .circles i:nth-child(2){animation-delay:2s;border-color:rgba(232,153,141,.3)}
+.close .circles i:nth-child(3){animation-delay:4s}
+@keyframes ripple{from{transform:scale(.25);opacity:1}to{transform:scale(1.15);opacity:0}}
+.card.hw{max-width:700px;background:rgba(28,28,33,.82)}
+.card.hw ol{padding-left:1.3em;display:flex;flex-direction:column;gap:.25em;line-height:1.42}
+.card.hw .r{color:var(--salmon)}
+.tag{font-weight:800;letter-spacing:.06em}
+.marq{position:absolute!important;left:0;right:0;bottom:calc(34px + env(safe-area-inset-bottom));overflow:hidden;z-index:2;opacity:.22;white-space:nowrap;font-weight:900;font-size:1.4em}
+.marq>div{display:inline-block;animation:marq 30s linear infinite}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---------- short landscape (phones sideways): size by height ---------- */
+@media (orientation:landscape) and (max-height:520px){
+  :root{--fs:clamp(11px,3.1vh,16px);--pad:clamp(22px,4.6vw,56px)}
+  .slide{padding:34px calc(var(--pad) + 26px) 26px;gap:6px}
+  h2{font-size:clamp(18px,6.2vh,30px)}.qtext{font-size:clamp(20px,7.4vh,34px)}
+  .slide.part h2{font-size:clamp(22px,8vh,40px)}.one{font-size:clamp(20px,7.2vh,34px)}
+  h1{font-size:clamp(34px,15vh,64px)}
+  .card{padding:6px 10px;border-radius:12px;gap:.15em}
+  .grid{gap:7px}.foot{padding:.2em 0 .2em .6em}
+  .nl i{height:18px}.nls{gap:8px}.lrs{gap:.25em 1.6em}
+  .vs .row{padding:.35em .7em;font-size:1.15em}
+  .arrow{width:34px;height:34px;font-size:16px}#prev{left:6px}#next{right:6px}
+  .cycwrap{width:min(50vh,34vw);--rr:calc(min(50vh,34vw) / 2);margin-top:12px}
+  .cyc{justify-content:flex-start;padding-top:40px}
+  .marq{bottom:20px}
+}
+
+/* ---------- portrait phones ---------- */
+@media (max-width:680px){
+  :root{--fs:15px;--pad:22px}
+  .slide{padding:62px 22px 56px;gap:12px}
+  .arrow,#dots{display:none}
+  .slide.img::after{background:linear-gradient(180deg,rgba(28,28,33,.86),rgba(28,28,33,.95) 40%,rgba(28,28,33,.97))}
+  .grid.c2,.grid.c3{grid-template-columns:1fr}
+  .grid.c4{grid-template-columns:1fr 1fr}
+  .pnum{font-size:44vw;top:auto;bottom:4%;right:4%;transform:rotate(-3deg);opacity:.14}
+  .lrs{grid-template-columns:1fr;gap:.3em}
+  .cup{font-size:64px}
+  /* the ring becomes a vertical stepper (21st 29815) with a loop-back arrow */
+  .cycwrap{width:100%;aspect-ratio:auto;--rr:0px}
+  .ring-svg{display:none}
+  .ring{position:relative;display:flex;flex-direction:column;gap:10px;padding-left:4px}
+  .ring::before{content:"";position:absolute;left:calc(1.05em + 3px);top:1em;bottom:1em;width:2px;background:rgba(255,255,255,.14)}
+  .ring li{position:relative;left:auto;top:auto;width:auto;height:auto}
+  .ring li>.node{position:relative;left:auto;top:auto;transform:none;flex-direction:row;width:auto;text-align:left;gap:.7em}
+  .ring li.on>.node{transform:none}
+  .rt{background:none;padding:0}
+  .hub{position:absolute;left:auto;right:4px;top:auto;bottom:-6px;transform:none;font-size:34px}
+  .cyc.done .hub{transform:rotate(360deg)}
+  .loopback{display:block!important}
+  .close .circles{right:-40vw;top:auto;bottom:-10vh;transform:none;width:120vw}
+}
+.loopback{display:none;color:var(--salmon);font-weight:700;margin:.2em 0 0 calc(1.05em + 3px);padding-left:1.2em;border-left:2px dashed var(--salmon);opacity:0;transition:opacity .5s}
+.cyc.done .loopback{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .on .rv{opacity:1;filter:none;transform:none}
+  .on .mask .mi{transform:none}
+  .one .w{opacity:1}
+  .card.spot::after{opacity:0}
+  .marq{display:none}
+}
