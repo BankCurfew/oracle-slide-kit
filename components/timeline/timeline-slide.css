@@ -28,6 +28,7 @@
 .tl{--fs:clamp(15px,1.46vw,30px); /* 28px @1920 floor, scaled */
   position:relative;flex:1 1 auto;min-height:0;width:100%;display:flex;flex-direction:column;
   gap:clamp(10px,2.2vh,24px);font-size:var(--fs);color:var(--tl-text)}
+.tl,.tl *{box-sizing:border-box} /* never rely on the host deck's reset */
 .tl-head{display:flex;flex-direction:column;gap:.35em}
 .tl-period{color:var(--tl-muted);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:1em}
 .tl-heading{font-family:var(--tl-title-font);color:var(--tl-text);font-weight:800;line-height:1.1;

@@ -99,6 +99,20 @@
       view.classList.toggle('fade-b', -off < max - 1);
     }
 
+    // designer G1 R1: a milestone only partly inside the view fades out whole (dot + text), so no sentence
+    // is ever cut mid-word at an edge. The active milestone is always kept.
+    function clip(off, active, animate) {
+      const lo = -off, hi = lo + viewSize();
+      ms.forEach((m, k) => {
+        const a = vert ? m.offsetTop : m.offsetLeft;
+        const b = a + (vert ? m.offsetHeight : m.offsetWidth);
+        const cut = k !== active && (a < lo - 1 || b > hi + 1);
+        if (!g) { m.style.visibility = cut ? 'hidden' : ''; return; }
+        if (animate) live.push(g.to(m, { autoAlpha: cut ? 0 : 1, duration: 0.3, ease: 'power1.out' }));
+        else g.set(m, { autoAlpha: cut ? 0 : 1 });
+      });
+    }
+
     function finish() { live.forEach((t) => t.progress(1)); live = []; }
 
     function setShown(k, on) {
@@ -121,6 +135,7 @@
       const len = still() ? trackSize() : anchor(k);
       const size = vert ? 'height' : 'width';
       edges(off);
+      clip(off, k, animate);
       if (g) {
         g.set(track, vert ? { x: 0 } : { y: 0 });
         if (animate) {
@@ -149,6 +164,7 @@
     function panTo(p) {
       pan = Math.max(0, Math.min(panMax(), p));
       edges(-pan);
+      clip(-pan, -1, false);
       const t = vert ? 'translateY(' + -pan + 'px)' : 'translateX(' + -pan + 'px)';
       if (g) g.set(track, vert ? { x: 0, y: -pan } : { y: 0, x: -pan }); else track.style.transform = t;
       const size = vert ? 'height' : 'width';
