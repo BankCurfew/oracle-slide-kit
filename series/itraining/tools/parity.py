@@ -24,6 +24,7 @@ def norm(s):
 want, cur = {}, None
 body = open(inv, encoding='utf-8').read().split('## Parity checklist', 1)[1]
 for line in body.splitlines():
+    if line.startswith('## '): cur = None; continue  # a later '## R..' section is notes, not slide lines (T2229)
     m = re.match(r'^### S(\d+)', line)
     if m: cur = int(m.group(1)); want[cur] = []; continue
     if cur is None or not line.startswith('- '): continue

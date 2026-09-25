@@ -255,10 +255,10 @@ S(f'''<section class="slide part ed">
 
 # 23-25 · S17-S19 iKnow screenshots (R8; S17 ③ score line dropped: iKnow shows no /100 today; S18/S19 figure lines pending writer)
 S(shot_slide('s17', 'หน้าคำถามของ iKnow: ชื่อ อายุ และอายุเกษียณ', 'iKnow ตอน 1', 'iKnow คืออะไร', f'''<div class="cd rv">เครื่องมือประเมินความคุ้มครองจากคำถามง่ายๆ</div>
-      <ul class="pts rv"><li><b>iKnow · เครื่องมือวิเคราะห์ความคุ้มครอง</b></li><li>เข้า iKYS → iKnow</li></ul>
+      <ul class="pts rv"><li><b>iKnow · เครื่องมือวิเคราะห์ความคุ้มครอง</b></li><li>เข้า iKYS → iKnow</li><li>iKnow ปลดล็อกเมื่อเป็น FA ขึ้นไป · ตัวแทนใหม่เริ่มจาก uKnow</li></ul>
       <div class="foot rv">ลูกค้า เห็นตัวเลขของตัวเอง แทนการฟังตัวแทนพูดฝ่ายเดียว = เชื่อและเปิดใจง่ายขึ้น</div>'''))
 S(shot_slide('s18', 'iKnow: ภาระไม่ได้หยุดพร้อมกับคุณ ใครจ่ายต่อ', 'iKnow ตอน 2', 'ผลลัพธ์ที่ลูกค้าเห็น', f'''<div class="cd rv">เส้นชีวิตของคุณ → 4 เหตุการณ์ที่ทำให้เส้นสะดุด → ช่องว่างของแต่ละเรื่อง</div>
-      <div class="foot rv">จุดที่ลูกค้าอึ้ง: เห็นว่าความคุ้มครองที่มีอยู่ยังไม่พอ<br><span class="r">ตัวอย่างกรณีเสียชีวิต: เห็นช่องว่างสะสมเป็นตัวเลขชัดเจน</span></div>''', crop=True))
+      <div class="foot rv">จุดที่ลูกค้าอึ้ง: เห็นว่าความคุ้มครองที่มีอยู่ยังไม่พอ<br><span class="r">ตัวอย่างกรณีเสียชีวิต: ตอนนัดจริง ลูกค้าจะเห็นช่องว่างนี้เป็นตัวเลขของตัวเอง</span></div>''', crop=True))
 S(shot_slide('s19', 'iKnow: เกษียณได้ไหม ยังขาดอยู่', 'iKnow ตอน 3', 'ช่องว่างที่ควรเติม', f'''<div class="cd rv">ตัวอย่าง: เงินเกษียณยังขาดอีก 7,188,730 บาท (ใช้จ่ายหลังเกษียณ 40,000 บาท/เดือน ถึงอายุ 80)</div>
       <div class="foot rv">iKnow เปลี่ยน "ช่องว่าง" ให้เป็น "สิ่งที่ต้องเติม" ด้วยตัวเลข = สร้างปัญหาให้ลูกค้าเห็นเอง ไม่ต้องขู่</div>'''))
 # 26 · S19 question
@@ -370,10 +370,8 @@ T4CSS = '''
 .ex{display:flex;flex-direction:column;gap:.4em;font-weight:700}.ex i{display:block;height:2.2em;border-bottom:2px dashed rgba(255,255,255,.3)}
 .on .late.rv{animation-delay:2.9s} /* S24: the 2 closing lines blur-in after the 7 pills */
 /* S18 (fasai R9 = no figure): the death frame is cropped above its gap card (the card shows abs() of a surplus, T2238) */
-.phone.crop{aspect-ratio:1188/1120;width:calc(74vh * 1188 / 2280)} /* same width as the full phones beside it */
-@media (orientation:landscape) and (max-height:520px){.phone.crop{width:calc(70vh * 1188 / 2280)}}
-.phone.crop img{object-fit:contain}
-@media (max-width:680px){.phone.crop{height:auto;width:min(100%,300px)}}
+.phone.crop{background:#0a0a0a} /* G1 R10: same full phone as S17/S19; the cropped screen sits at the top on the app's own background (#0a0a0a, sampled) */
+.phone.crop img{object-fit:contain;object-position:top}
 /* G1 R1: Thai display lines need room for stacked marks (lh 1.2 let tone marks touch the line above);
    each source line is its own balanced block, and portrait drops one size step so a line takes <= 2 rows */
 .quote .one{max-width:26ch;line-height:var(--qlh,1.45)}

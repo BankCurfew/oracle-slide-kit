@@ -423,10 +423,8 @@ table.obj td.gap{width:.6em;padding:0;background:none;border:0}
 .ex{display:flex;flex-direction:column;gap:.4em;font-weight:700}.ex i{display:block;height:2.2em;border-bottom:2px dashed rgba(255,255,255,.3)}
 .on .late.rv{animation-delay:2.9s} /* S24: the 2 closing lines blur-in after the 7 pills */
 /* S18 (fasai R9 = no figure): the death frame is cropped above its gap card (the card shows abs() of a surplus, T2238) */
-.phone.crop{aspect-ratio:1188/1120;width:calc(74vh * 1188 / 2280)} /* same width as the full phones beside it */
-@media (orientation:landscape) and (max-height:520px){.phone.crop{width:calc(70vh * 1188 / 2280)}}
-.phone.crop img{object-fit:contain}
-@media (max-width:680px){.phone.crop{height:auto;width:min(100%,300px)}}
+.phone.crop{background:#0a0a0a} /* G1 R10: same full phone as S17/S19; the cropped screen sits at the top on the app's own background (#0a0a0a, sampled) */
+.phone.crop img{object-fit:contain;object-position:top}
 /* G1 R1: Thai display lines need room for stacked marks (lh 1.2 let tone marks touch the line above);
    each source line is its own balanced block, and portrait drops one size step so a line takes <= 2 rows */
 .quote .one{max-width:26ch;line-height:var(--qlh,1.45)}
@@ -620,7 +618,7 @@ table.obj td.gap{width:.6em;padding:0;background:none;border:0}
       <div class="kick rv">iKnow ตอน 1</div>
       <h2 class="rv">iKnow คืออะไร</h2>
       <div class="cd rv">เครื่องมือประเมินความคุ้มครองจากคำถามง่ายๆ</div>
-      <ul class="pts rv"><li><b>iKnow · เครื่องมือวิเคราะห์ความคุ้มครอง</b></li><li>เข้า iKYS → iKnow</li></ul>
+      <ul class="pts rv"><li><b>iKnow · เครื่องมือวิเคราะห์ความคุ้มครอง</b></li><li>เข้า iKYS → iKnow</li><li>iKnow ปลดล็อกเมื่อเป็น FA ขึ้นไป · ตัวแทนใหม่เริ่มจาก uKnow</li></ul>
       <div class="foot rv">ลูกค้า เห็นตัวเลขของตัวเอง แทนการฟังตัวแทนพูดฝ่ายเดียว = เชื่อและเปิดใจง่ายขึ้น</div>
     </div>
   </div>
@@ -632,7 +630,7 @@ table.obj td.gap{width:.6em;padding:0;background:none;border:0}
       <div class="kick rv">iKnow ตอน 2</div>
       <h2 class="rv">ผลลัพธ์ที่ลูกค้าเห็น</h2>
       <div class="cd rv">เส้นชีวิตของคุณ → 4 เหตุการณ์ที่ทำให้เส้นสะดุด → ช่องว่างของแต่ละเรื่อง</div>
-      <div class="foot rv">จุดที่ลูกค้าอึ้ง: เห็นว่าความคุ้มครองที่มีอยู่ยังไม่พอ<br><span class="r">ตัวอย่างกรณีเสียชีวิต: เห็นช่องว่างสะสมเป็นตัวเลขชัดเจน</span></div>
+      <div class="foot rv">จุดที่ลูกค้าอึ้ง: เห็นว่าความคุ้มครองที่มีอยู่ยังไม่พอ<br><span class="r">ตัวอย่างกรณีเสียชีวิต: ตอนนัดจริง ลูกค้าจะเห็นช่องว่างนี้เป็นตัวเลขของตัวเอง</span></div>
     </div>
   </div>
 </section>
