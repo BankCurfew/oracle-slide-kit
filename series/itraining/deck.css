@@ -277,3 +277,128 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
   .card.spot::after{opacity:0}
   .marq{display:none}
 }
+
+/* =================== T2229 additions (T4 Product Approach; reusable T2-T6) =================== */
+/* white editorial section slide that carries content (no divider number): giant red kicker + skew bar */
+.slide.part.ed h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);max-width:none}
+.slide.part.ed .kick{font-size:clamp(22px,min(2.4vw,4.2vh),44px);letter-spacing:.12em}
+.slide.part .card{background:#fff;border-color:rgba(28,28,33,.14);color:var(--ink);box-shadow:0 1px 0 rgba(28,28,33,.04)}
+.slide.part .card .cd{color:var(--ink2)}
+.slide.part .card .n{background:rgba(211,17,69,.1);color:var(--red)}
+.slide.part .foot,.slide.part .sub{color:var(--ink)}
+.slide.part .sub{color:var(--ink2)}
+.slide.part .intro{color:var(--ink2)}
+/* channel number chip */
+.chn{align-self:flex-start;background:var(--red);color:#fff;font-weight:900;border-radius:999px;padding:.2em .9em;font-size:max(1em,24px);letter-spacing:.04em}
+.pts{display:flex;flex-direction:column;gap:.45em;max-width:70ch;line-height:1.45}
+.pts li{list-style:none;padding-left:1.1em;position:relative}
+.pts li::before{content:"";position:absolute;left:0;top:.62em;width:.45em;height:.45em;border-radius:50%;background:var(--red)}
+.pts li b{color:var(--salmon)}
+.slide.part .pts li b{color:var(--red)}
+/* 21st 29393 Chat Bubble Thread: tokens only. .me = agent (sent, right), .them = customer (received, left) */
+.thread{display:flex;flex-direction:column;gap:.5em;width:100%;max-width:980px}
+.lbl{color:var(--muted);font-weight:800;font-size:1em;letter-spacing:.04em}
+.slide.part .lbl{color:var(--ink2)}
+.bub{position:relative;max-width:min(88%,860px);padding:.6em .95em;border-radius:1.1em;line-height:1.45}
+.bub.me{align-self:flex-end;background:rgba(211,17,69,.2);border:1px solid rgba(232,153,141,.45);border-bottom-right-radius:.3em}
+.bub.them{align-self:flex-start;background:rgba(255,255,255,.09);border:1px solid var(--line);border-bottom-left-radius:.3em;color:#fff}
+.slide.part .bub.me{background:rgba(211,17,69,.07);border-color:rgba(211,17,69,.35);color:var(--ink)}
+.slide.part .bub.them{background:rgba(28,28,33,.06);border-color:rgba(28,28,33,.12);color:var(--ink)}
+.bub .lbl{display:block;font-size:.9em;margin-bottom:.15em;color:var(--salmon)}
+/* life-event map: event -> product */
+.emap{display:grid;grid-template-columns:auto auto 1fr;gap:.35em .7em;align-items:baseline;max-width:900px}
+.emap .ev{font-weight:800}.emap .ar{color:var(--salmon);font-weight:900}.emap .pr{color:var(--muted)}
+/* tap-to-reveal step (generic stepper in deck.js): .stp hidden until its step */
+.stp{transition:opacity .45s,transform .45s var(--spring)}
+.slide:not(.revealed) .stp:not(.shown){opacity:0;transform:translateY(12px);pointer-events:none}
+.stepnote{color:var(--muted);font-size:1em;font-weight:700}
+/* arrow flow (chevron chain), last pill red; wraps to a vertical chain in portrait */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.45em;list-style:none}
+.flow li{display:flex;align-items:center;gap:.45em;font-weight:800}
+.flow li span{border:1.5px solid rgba(255,255,255,.22);border-radius:999px;padding:.35em .95em;background:rgba(38,38,44,.8);white-space:nowrap}
+.flow li:last-child span{background:var(--red);border-color:var(--red);color:#fff}
+.flow li i{font-style:normal;color:var(--salmon);font-weight:900}
+.slide.part .flow li span{background:#fff;border-color:rgba(28,28,33,.2);color:var(--ink)}
+.slide.part .flow li:last-child span{background:var(--red);border-color:var(--red);color:#fff}
+.slide.part .flow li i{color:var(--red)}
+.flow.lite li span{opacity:.25;transition:opacity .4s}
+.on .flow.lite li span{animation:lit .45s ease forwards;animation-delay:calc(.45s + var(--k) * .32s)}
+.on .flow.lite li i{opacity:0;animation:lit .3s ease forwards;animation-delay:calc(.6s + var(--k) * .32s)}
+/* horizontal stepper (T2182 timeline look) / vertical at portrait (21st 29815) */
+.hstep{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));gap:.6em;list-style:none;width:100%;position:relative}
+.hstep::before{content:"";position:absolute;left:calc(100% / var(--n) / 2);right:calc(100% / var(--n) / 2);top:1.05em;height:2px;background:rgba(211,17,69,.5)}
+.hstep li{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.4em;position:relative;line-height:1.3;font-weight:700}
+.hstep .rn{position:relative;z-index:1}
+.slide.part .hstep li{color:var(--ink)}
+/* series map: 6 slots, T.4 lit */
+.smap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.6em;list-style:none;width:100%}
+.smap li{border-top:4px solid rgba(255,255,255,.18);padding:.55em .2em 0;display:flex;flex-direction:column;gap:.25em;opacity:.55}
+.smap li b{font-size:1.05em;line-height:1.25}
+.smap li span{color:var(--muted);line-height:1.35}
+.smap li.now{opacity:1;border-top-color:var(--red)}
+.smap li.now b{color:var(--salmon)}
+/* channel ladder: 5 cards, fill steps salmon-tint -> charcoal along "ข้อมูลมาก (ง่าย) -> ข้อมูลน้อย (ยาก)" */
+.ladder{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6em;list-style:none;width:100%}
+.ladder li{border-radius:14px;padding:.7em .8em;display:flex;flex-direction:column;gap:.2em;line-height:1.3;border:1px solid rgba(28,28,33,.12)}
+.ladder li .n{font-weight:900;font-size:1.5em;color:var(--red);line-height:1}
+.ladder li b{font-weight:900}
+.ladder li:nth-child(1){background:#fbe7e3;color:var(--ink)}
+.ladder li:nth-child(2){background:#efcfc9;color:var(--ink)}
+.ladder li:nth-child(3){background:#9a8e8a;color:#fff}
+.ladder li:nth-child(4){background:#4a4549;color:#fff}
+.ladder li:nth-child(5){background:var(--char);color:#fff}
+.ladder li:nth-child(n+3) .n{color:var(--salmon)}
+.axis{display:flex;align-items:center;gap:.6em;font-weight:800;color:var(--ink2)}
+.axis::after{content:"";flex:1;height:3px;background:linear-gradient(90deg,#efcfc9,var(--char));border-radius:2px}
+/* objection table (semantics kept: <table><th scope=col>) */
+table.obj{border-collapse:separate;border-spacing:0 .5em;width:100%;max-width:1150px}
+table.obj th{color:var(--muted);font-weight:800;text-align:left;padding:0 .8em;letter-spacing:.04em}
+table.obj td{vertical-align:top;line-height:1.42;padding:.55em .85em}
+table.obj td.c{background:rgba(255,255,255,.09);border:1px solid var(--line);border-radius:1em 1em 1em .3em;font-weight:700;width:34%}
+table.obj td.a{background:#fff;color:var(--ink);border-left:3px solid var(--red);border-radius:10px}
+table.obj tr>td+td{border-left-width:3px}
+table.obj td.gap{width:.6em;padding:0;background:none;border:0}
+/* screenshot in a phone frame (21st 6474 iPhone Mockup, frame only, neutral greys) */
+.shot{display:grid;grid-template-columns:38% 1fr;gap:clamp(16px,3vw,48px);align-items:center;width:100%}
+.phone{justify-self:center;border:clamp(6px,.7vw,11px) solid #3a3a40;border-radius:clamp(22px,2.6vw,40px);background:#0d0d10;overflow:hidden;
+  box-shadow:0 0 0 1.5px #5a5a62,0 20px 50px rgba(0,0,0,.45);max-height:74vh;aspect-ratio:1188/2280;position:relative}
+.phone img{display:block;width:100%;height:100%;object-fit:cover;object-position:top}
+.phone::before{content:"";position:absolute;top:.55em;left:50%;transform:translateX(-50%);width:28%;height:.9em;border-radius:1em;background:#0d0d10;z-index:1}
+.frame{justify-self:center;border-radius:16px;overflow:hidden;box-shadow:0 0 0 1.5px #5a5a62,0 20px 50px rgba(0,0,0,.45);background:#fff;max-width:100%}
+.frame img{display:block;width:100%;height:auto}
+.shot .txt{display:flex;flex-direction:column;gap:clamp(8px,1.8vh,18px)}
+.tag0{color:var(--muted);font-size:1em;font-weight:700}
+/* two routes (21st 26826 Comparison, "recommended" badge off: neither side is marked) */
+.routes .card{justify-content:flex-start}
+.routes .ct{color:var(--salmon)}
+@media (orientation:landscape) and (max-height:520px){
+  .phone{max-height:70vh}.smap li{padding-top:.3em}.ladder li{padding:.4em .5em}
+  .bub{padding:.35em .7em}.thread{gap:.3em}table.obj{border-spacing:0 .3em}table.obj td{padding:.3em .6em}
+  .slide.scroll{overflow-y:auto;justify-content:flex-start}
+}
+@media (max-width:680px){
+  .smap{grid-template-columns:1fr 1fr;gap:.5em}
+  .ladder{grid-template-columns:1fr;gap:.4em}
+  .ladder li{flex-direction:row;align-items:baseline;flex-wrap:wrap;gap:.1em .45em;padding:.45em .7em}
+  .axis{flex-wrap:wrap}.axis::after{flex-basis:100%}
+  .flow{flex-direction:column;align-items:flex-start;gap:.2em}
+  .flow li{flex-direction:column;align-items:flex-start;gap:.2em}
+  .flow li i{transform:rotate(90deg);margin-left:1.2em;display:inline-block}
+  .hstep{grid-template-columns:1fr;gap:.45em}
+  .hstep::before{left:1.05em;right:auto;top:1em;bottom:1em;width:2px;height:auto}
+  .hstep li{flex-direction:row;text-align:left;align-items:center;gap:.7em}
+  .shot{grid-template-columns:1fr;gap:12px}
+  .phone{max-height:46vh;width:auto;height:46vh}
+  .emap{grid-template-columns:1fr;gap:0}
+  .emap .ar{display:none}.emap .pr{margin-bottom:.35em}
+  table.obj,table.obj tbody,table.obj tr,table.obj td{display:block;width:auto}
+  table.obj thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  table.obj tr{margin-bottom:12px}
+  table.obj td.c{width:auto;margin-right:18%}
+  table.obj td.c::before{content:"ลูกค้าพูด";display:block;color:var(--muted);font-size:.85em;font-weight:800}
+  table.obj td.a{margin-top:6px}
+  table.obj td.gap{display:none}
+  .bub{max-width:94%}
+  .slide.scroll{overflow-y:auto;justify-content:flex-start}
+}
+@media (prefers-reduced-motion:reduce){ .stp{opacity:1!important;transform:none!important} .flow.lite li span,.flow.lite li i{opacity:1} }
