@@ -5,8 +5,8 @@ verbatim, with the recorded rulings applied (R1 S10 stat dropped, R2 Promotion, 
 F5 start hint). Layout = Designer-Oracle output/t2229-product-approach/ART-DIRECTION.md (192a19d + F7 45d032d):
 37 slides = 28 + 9 split question slides. Lines still waiting on a ruling render nothing and carry
 data-pending="<flag>" so G1/parity count them (no "[รอยืนยัน" ever reaches trainees).
-Screenshots = live uKnow via the FE-Oracle harness ([TEST] profile, Supabase mocked, 0 prod writes):
-S17 question screen, S18 = result beat s26 (coverage gap), S19 = result beat s27 (fill the gap) · designer pick A.
+Screenshots = live iKnow V4 (/iknow-v4, R8: แบงค์ uKnow -> iKnow) via the FE-Oracle harness (mock profile, Supabase mocked,
+0 prod writes): S17 = s2 question screen, S18 = risk-death gap, S19 = s8 retirement gap (fe proposal, designer confirms).
 """
 import base64, os, re
 
@@ -160,7 +160,7 @@ S(chan(3, 'กระแส: ลูกค้าทักมาถามเอง'
 S(chan(4, 'Promotion ลูกค้าใหม่', 'ข้อมูลน้อยกว่า 3 ช่องแรก ต้องสร้างความสัมพันธ์จากศูนย์',
        pts(['เข้าถึงผ่าน Promotion / แคมเปญ (event, ออกบูธ, แนะนำต่อ, ยิงแอด)',
             'Promotion เป็นแค่ประตู ต้องรีบสร้าง trust + หา Need จริงหลังได้นัด']),
-       '"ตอนนี้มีแคมเปญตรวจสุขภาพการเงินฟรีด้วย uKnow ใช้เวลาไม่กี่นาที ได้เห็นภาพความคุ้มครองของตัวเอง สนใจลองไหมครับ"'))
+       '"ตอนนี้มีแคมเปญตรวจสุขภาพการเงินฟรีด้วย iKnow ใช้เวลาไม่กี่นาที ได้เห็นภาพความคุ้มครองของตัวเอง สนใจลองทำด้วยกันไหมครับ"'))
 # 13 · S10 channel 5 (R1: stat number dropped, Editor PASS wording)
 S(chan(5, 'Knock Door', 'ข้อมูลน้อยสุด ถูกปฏิเสธสูงสุด',
        pts(['มักต้องเจอคำปฏิเสธหลายครั้ง กว่าจะได้นัด 1 ครั้ง',
@@ -222,7 +222,7 @@ S('''<section class="slide dots chat14 scroll">
       <div class="bub me stp">"ขอบคุณที่สนใจนะคะ 🙏 เรื่องนี้มีรายละเอียดที่ต้องปรับตามอายุและความต้องการของพี่ค่ะ"</div>
       <div class="bub me stp">"หนูขอชวนคุยสั้นๆ สัก 20 นาที จะแนะนำได้ตรงกว่าตอบในแชทค่ะ"</div>
       <div class="bub me stp">"พี่สะดวกพุธบ่าย หรือ ศุกร์เช้า ดีคะ"</div>
-      <div class="stp inv"><div class="lbl">ชวนทำ uKnow (เดิมชื่อ iCheck) ก่อนนัด</div><div class="bub me">"ก่อนเจอกัน ลองทำ uKnow ดูไหมคะ ใช้เวลาไม่กี่นาที จะได้เห็นภาพความคุ้มครองของตัวเองก่อน แล้วเราค่อยคุยจากผลจริงค่ะ"</div></div>
+      <div class="stp inv"><div class="lbl">ชวนทำ iKnow (เครื่องมือวิเคราะห์ความคุ้มครอง) ด้วยกันตอนนัด</div><div class="bub me">"เจอกันแล้วเราลองทำ iKnow ด้วยกันนะคะ ใช้เวลาไม่กี่นาที จะได้เห็นภาพความคุ้มครองของตัวเองชัดขึ้น แล้วค่อยคุยจากผลจริงค่ะ"</div></div>
     </div>
     <div class="ex"><span>📝 เขียนบทแชทของคุณเอง 1 เวอร์ชัน (แบ่ง 3 ท่อน):</span><i></i></div>
   </div>
@@ -231,7 +231,7 @@ S('''<section class="slide dots chat14 scroll">
 # 20 · S15 objection table (semantic table; chat pairs at 390)
 rows = [('ยุ่ง ไม่มีเวลา', 'เข้าใจครับ เลยขอแค่ 20 นาที เลือกวันที่พี่สบายใจสุด'),
         ('ส่งมาทางไลน์ได้ไหม', 'ได้ครับ แต่บางส่วนต้องปรับตามข้อมูลพี่ เจอกันสั้นๆ จะตรงกว่า'),
-        ('มีอยู่แล้ว', 'ดีเลยครับ ผมช่วยดูให้ว่าที่มีครอบคลุมพอไหม ใช้ uKnow เช็คสั้นๆ ได้'),
+        ('มีอยู่แล้ว', 'ดีเลยครับ ผมช่วยดูให้ว่าที่มีครอบคลุมพอไหม ใช้ iKnow เช็คสั้นๆ ได้'),
         ('ไม่สนใจ', 'ไม่เป็นไรครับ ขอเก็บชื่อไว้ ถ้ามีข้อมูลที่เป็นประโยชน์จะส่งให้')]
 tr = ''.join(f'<tr><td class="c">{a}</td><td class="gap"></td><td class="a">{b}</td></tr>' for a, b in rows)
 S(f'''<section class="slide dots scroll">
@@ -253,16 +253,16 @@ S(f'''<section class="slide part ed">
   <div class="sub rv">ขึ้นกับสิ่งที่เจอตอนทำกระบวนการ (เชื่อม T.3)</div>
 </section>''')
 
-# 23-25 · S17-S19 uKnow screenshots (F7 wording pending writer; S17 name/scoring line pending writer from fe 11:16 fact)
-S(shot_slide('s17', 'หน้าคำถามของ uKnow: อายุเท่าไหร่แล้วครับ', 'uKnow ตอน 1', 'uKnow คืออะไร', f'''<div class="cd rv">เครื่องมือประเมินความคุ้มครองจากคำถามง่ายๆ</div>
-      <ul class="pts rv"><li><b>uKnow · รู้จักความคุ้มครอง</b></li><li>เข้า iKYS → uKnow</li><li>เบื้องหลังคะแนน (เต็ม 100): ความคุ้มครอง 40 · ภาษี 20 · สำรอง (หนี้และการออม) 15 · เกษียณ 15 · CRP (ประสบการณ์และความสนใจการลงทุน) 10</li></ul>
+# 23-25 · S17-S19 iKnow screenshots (R8; S17 ③ score line dropped: iKnow shows no /100 today; S18/S19 figure lines pending writer)
+S(shot_slide('s17', 'หน้าคำถามของ iKnow: ชื่อ อายุ และอายุเกษียณ', 'iKnow ตอน 1', 'iKnow คืออะไร', f'''<div class="cd rv">เครื่องมือประเมินความคุ้มครองจากคำถามง่ายๆ</div>
+      <ul class="pts rv"><li><b>iKnow · เครื่องมือวิเคราะห์ความคุ้มครอง</b></li><li>เข้า iKYS → iKnow</li></ul>
       <div class="foot rv">ลูกค้า เห็นตัวเลขของตัวเอง แทนการฟังตัวแทนพูดฝ่ายเดียว = เชื่อและเปิดใจง่ายขึ้น</div>'''))
-S(shot_slide('s18', 'ผลวิเคราะห์ของ uKnow: ช่องว่างความคุ้มครอง', 'uKnow ตอน 2', 'ผลลัพธ์ที่ลูกค้าเห็น', f'''<div class="cd rv">คะแนนรวม → ค่ารักษาจริง → ช่องว่างความคุ้มครอง → แผนเติมเต็ม</div>
-      <div class="foot rv">จุดที่ลูกค้าอึ้ง: เห็นว่าความคุ้มครองที่มีอยู่ยังไม่พอ<br><span class="r">ขาดอีก 96% ของที่ควรมี</span> (ตัวอย่าง: ชาย 30 ปี รายได้ 96,700 บาท/เดือน) = เห็นช่องว่างชัดด้วยตัวเลข</div>'''))
-S(shot_slide('s19', 'ผลวิเคราะห์ของ uKnow: เติมเต็มตรงจุดที่ขาด', 'uKnow ตอน 3', 'ช่องว่างที่ควรเติม', f'''<div class="cd rv">ตัวอย่างเดียวกัน: มีอยู่ 1.0M ต้องการ 25.3M ต้องเพิ่มอีก 24.3M</div>
-      <div class="foot rv">uKnow เปลี่ยน "ช่องว่าง" ให้เป็น "สิ่งที่ต้องเติม" ด้วยตัวเลข = สร้างปัญหาให้ลูกค้าเห็นเอง ไม่ต้องขู่</div>'''))
+S(shot_slide('s18', 'iKnow: ภาระไม่ได้หยุดพร้อมกับคุณ ใครจ่ายต่อ', 'iKnow ตอน 2', 'ผลลัพธ์ที่ลูกค้าเห็น', f'''<div class="cd rv">เส้นชีวิตของคุณ → 4 เหตุการณ์ที่ทำให้เส้นสะดุด → ช่องว่างของแต่ละเรื่อง</div>
+      {pending('R8-S18')}'''))
+S(shot_slide('s19', 'iKnow: เกษียณได้ไหม ยังขาดอยู่', 'iKnow ตอน 3', 'ช่องว่างที่ควรเติม', f'''{pending('R8-S19')}
+      <div class="foot rv">iKnow เปลี่ยน "ช่องว่าง" ให้เป็น "สิ่งที่ต้องเติม" ด้วยตัวเลข = สร้างปัญหาให้ลูกค้าเห็นเอง ไม่ต้องขู่</div>'''))
 # 26 · S19 question
-S(q('ทำไมลูกค้าเชื่อตัวเลขจาก uKnow<br><span class="r">มากกว่าคำพูดของตัวแทน?</span>', '💬 ช่วยกันตอบ'))
+S(q('ทำไมลูกค้าเชื่อตัวเลขจาก iKnow<br><span class="r">มากกว่าคำพูดของตัวแทน?</span>', '💬 ช่วยกันตอบ'))
 
 # 27 · S20 create the problem
 S('''<section class="slide dots ans">
@@ -271,7 +271,7 @@ S('''<section class="slide dots ans">
   <div class="intro rv">ให้ลูกค้าเห็น <span class="r">ขนาดของความเสี่ยง</span> จริง</div>
   <div class="grid c2 rv">
     <div class="card spot"><div class="ct">ใช้คำถาม</div><div class="cq">"ถ้าต้องหยุดทำงาน 6 เดือน ครอบครัวจะเป็นยังไง"</div><div class="cd dim">ให้ลูกค้าคิดเอง ไม่ขู่</div></div>
-    <div class="card spot"><div class="ct">ใช้ uKnow</div><div class="cd">ช่องว่างที่เห็นเป็นตัวเลข = ปัญหาที่จับต้องได้</div></div>
+    <div class="card spot"><div class="ct">ใช้ iKnow</div><div class="cd">ช่องว่างที่เห็นเป็นตัวเลข = ปัญหาที่จับต้องได้</div></div>
   </div>
   <div class="foot rv">ต่อยอด T.2 จุดขาย AIA</div>
 </section>''')
@@ -282,10 +282,10 @@ S(q('ถ้าลูกค้าบอก "ผมรู้นะว่ามั�
 S(f'''<section class="slide dots">
   <div class="kick rv">หน้างาน</div>
   <h2 class="rv">เสนอ</h2>
-  <div class="intro rv">เสนอสินค้าที่ตอบช่องว่างจาก uKnow เลือก 1-2 แบบที่ใช่</div>
+  <div class="intro rv">เสนอสินค้าที่ตอบช่องว่างจาก iKnow เลือก 1-2 แบบที่ใช่</div>
   {flow(['ช่องว่างที่เห็น', 'ผลถ้าไม่เติม', 'แผนที่ตอบ', 'เบี้ย/ตัวเลข', 'ปิด'])}
   <div class="foot rv">สินค้าที่เสนอ อาจไม่ใช่สินค้าที่ใช้เปิดนัด</div>
-  <div class="sub rv">เช่น เปิดด้วยสุขภาพ แต่ uKnow ชี้ว่าช่องว่างใหญ่สุดคือคุ้มครองชีวิต</div>
+  <div class="sub rv">เช่น เปิดด้วยสุขภาพ แต่ iKnow ชี้ว่าช่องว่างใหญ่สุดคือคุ้มครองชีวิต</div>
 </section>''')
 
 # 30 · S22 close
@@ -319,7 +319,7 @@ S(q('ลูกค้าคนเดียวกัน<br>เข้าด้ว�
 S(f'''<section class="slide dots">
   <div class="kick rv">สรุป</div>
   <h2 class="rv">Product Approach ทั้งกระบวน</h2>
-  {flow(['ข้อมูล/โอกาส', 'เลือกสินค้าเปิด', 'ทำนัด', 'เปิดใจ+uKnow', 'สร้างปัญหา', 'เสนอ', 'ปิด'], lite=True)}
+  {flow(['ข้อมูล/โอกาส', 'เลือกสินค้าเปิด', 'ทำนัด', 'เปิดใจ+iKnow', 'สร้างปัญหา', 'เสนอ', 'ปิด'], lite=True)}
   <div class="foot rv late">เร็วที่ทางเข้า ครบที่กระบวนการ</div>
   <div class="sub rv late">ยึดประโยชน์ลูกค้าตลอด</div>
 </section>''')
@@ -335,7 +335,7 @@ S(f'''<section class="slide part ed">
   <h2 class="rv">Product Approach 1 รอบเต็ม</h2>
   <div class="skew rv"></div>
   <div class="intro rv">Role-play จับคู่</div>
-  {hstep(['เลือกช่องทาง (1 ใน 5) + สินค้าที่ใช้เปิดตามข้อมูลที่มี', 'เขียน + เล่นบทนัด (โทร หรือ แชท)', 'เปิดใจ + ทำ uKnow ให้ลูกค้าเห็นช่องว่าง',
+  {hstep(['เลือกช่องทาง (1 ใน 5) + สินค้าที่ใช้เปิดตามข้อมูลที่มี', 'เขียน + เล่นบทนัด (โทร หรือ แชท)', 'เปิดใจ + ทำ iKnow ให้ลูกค้าเห็นช่องว่าง',
           'สร้างปัญหา + เสนอ 1-2 แบบ (อาจต่างจากสินค้าเปิด)', 'ปิด หรือ นัด next step', 'นำเสนอหน้าห้อง 3 นาที รับ feedback'])}
 </section>''')
 
