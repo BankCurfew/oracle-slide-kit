@@ -97,6 +97,20 @@
     };
   });
 
+  // generic tap-to-reveal (T2229): a slide with .stp children reveals them one per tap (stepper hook), all at once when reduced motion
+  deck.querySelectorAll('.slide').forEach((s) => {
+    const st = [...s.querySelectorAll('.stp')];
+    if (!st.length || s.stepper) return;
+    const n = st.length; let step = 0;
+    const draw = () => { st.forEach((el, k) => el.classList.toggle('shown', k < step)); s.classList.toggle('revealed', step >= n); };
+    s.stepper = {
+      next() { if (reduce || step >= n) return false; step++; draw(); return true; },
+      prev() { if (reduce || step <= 0) return false; step--; draw(); return true; },
+      enter(dir) { step = reduce ? n : (dir < 0 ? n : 0); draw(); },
+      get step() { return step; }, get steps() { return n; },
+    };
+  });
+
   /* ---------- navigation ---------- */
   let i = 0;
   slides.forEach((_, k) => { const b = document.createElement('button'); b.className = 'dot'; b.setAttribute('aria-label', String(k + 1)); b.onclick = (e) => { e.stopPropagation(); go(k); }; dots.appendChild(b); });
