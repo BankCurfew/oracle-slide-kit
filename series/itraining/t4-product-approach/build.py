@@ -58,10 +58,10 @@ def hstep(items):
     li = ''.join(f'<li><span class="rn">{k + 1}</span><span>{t}</span></li>' for k, t in enumerate(items))
     return f'<ol class="hstep rv" style="--n:{len(items)}">{li}</ol>'
 
-def shot_slide(img, alt, kick, title, body):
+def shot_slide(img, alt, kick, title, body, crop=False):
     return f'''<section class="slide dots shot-s">
   <div class="shot">
-    <div class="phone rv"><img src="{shot(img)}" alt="{alt}"></div>
+    <div class="phone{' crop' if crop else ''} rv"><img src="{shot(img)}" alt="{alt}"></div>
     <div class="txt">
       <div class="kick rv">{kick}</div>
       <h2 class="rv">{title}</h2>
@@ -258,7 +258,7 @@ S(shot_slide('s17', 'หน้าคำถามของ iKnow: ชื่อ �
       <ul class="pts rv"><li><b>iKnow · เครื่องมือวิเคราะห์ความคุ้มครอง</b></li><li>เข้า iKYS → iKnow</li></ul>
       <div class="foot rv">ลูกค้า เห็นตัวเลขของตัวเอง แทนการฟังตัวแทนพูดฝ่ายเดียว = เชื่อและเปิดใจง่ายขึ้น</div>'''))
 S(shot_slide('s18', 'iKnow: ภาระไม่ได้หยุดพร้อมกับคุณ ใครจ่ายต่อ', 'iKnow ตอน 2', 'ผลลัพธ์ที่ลูกค้าเห็น', f'''<div class="cd rv">เส้นชีวิตของคุณ → 4 เหตุการณ์ที่ทำให้เส้นสะดุด → ช่องว่างของแต่ละเรื่อง</div>
-      {pending('R8-S18')}'''))
+      {pending('R8-S18')}''', crop=True))
 S(shot_slide('s19', 'iKnow: เกษียณได้ไหม ยังขาดอยู่', 'iKnow ตอน 3', 'ช่องว่างที่ควรเติม', f'''{pending('R8-S19')}
       <div class="foot rv">iKnow เปลี่ยน "ช่องว่าง" ให้เป็น "สิ่งที่ต้องเติม" ด้วยตัวเลข = สร้างปัญหาให้ลูกค้าเห็นเอง ไม่ต้องขู่</div>'''))
 # 26 · S19 question
@@ -369,6 +369,11 @@ T4CSS = '''
 .c14 .inv{display:flex;flex-direction:column;gap:.3em;margin-top:.3em}.c14 .inv .bub{align-self:flex-end}
 .ex{display:flex;flex-direction:column;gap:.4em;font-weight:700}.ex i{display:block;height:2.2em;border-bottom:2px dashed rgba(255,255,255,.3)}
 .on .late.rv{animation-delay:2.9s} /* S24: the 2 closing lines blur-in after the 7 pills */
+/* S18 (fasai R9 = no figure): the death frame is cropped above its gap card (the card shows abs() of a surplus, T2238) */
+.phone.crop{aspect-ratio:1188/1120;width:calc(74vh * 1188 / 2280)} /* same width as the full phones beside it */
+@media (orientation:landscape) and (max-height:520px){.phone.crop{width:calc(70vh * 1188 / 2280)}}
+.phone.crop img{object-fit:contain}
+@media (max-width:680px){.phone.crop{height:auto;width:min(100%,300px)}}
 /* G1 R1: Thai display lines need room for stacked marks (lh 1.2 let tone marks touch the line above);
    each source line is its own balanced block, and portrait drops one size step so a line takes <= 2 rows */
 .quote .one{max-width:26ch;line-height:var(--qlh,1.45)}
