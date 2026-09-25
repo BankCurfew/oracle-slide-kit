@@ -16,6 +16,8 @@
 | `template/deck-template.html` | Master HTML slide template; `slide.stepper` hook (next/prev/enter) for step-driven slides (T2182) | Prism | Placeholder |
 | `components/timeline/timeline-slide.js` + `.css` | Step-driven timeline slide (T2182): JSON data, presets aia-dark / aia-light / wb-prestige, portrait vertical, reduced motion | FE | Done (designer G1 pending) |
 | `components/timeline/timeline-demo.html` | Demo deck (7 milestones incl. Thai, 3 presets); `build-demo.py` inlines it to `output/timeline-demo.html` | FE | Done |
+| `series/itraining/` | iTraining T1-T6 series template: deck.css + deck.js (shared), tN-*/build.py per episode, tools/parity.py (T2194) | FE | T1 built, designer G1 pending |
+| `output/itraining-t1-mindset.html` | iTraining T1/6 Mindset deck (37 slides, self-contained) | FE | Preview for แบงค์ |
 | `examples/T1-simple/` | Type 1 (simple) reference deck | Prism/team | Empty |
 | `examples/T2-advanced/` | Type 2 (advanced) reference deck | Prism/team | Empty |
 
