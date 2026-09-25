@@ -354,7 +354,7 @@ S('''<section class="slide dots ans">
 # 37 · S28 closing quote (the only gold)
 S('''<section class="slide img quote" data-bg="leader">
   <div class="bar gbar rv"></div>
-  <div class="one rv" data-read>"Product Approach ที่ดี<br>ไม่ใช่การขายสินค้าที่เราถือมา<br><span class="gold">แต่คือการใช้สินค้านั้นเปิดประตู</span><br>แล้วมอบแผนที่ลูกค้าต้องการจริงๆ ให้เขา"</div>
+  <div class="one rv" data-read><span class="ql">"Product Approach ที่ดี</span><span class="ql">ไม่ใช่การขายสินค้าที่เราถือมา</span><span class="ql gold">แต่คือการใช้สินค้านั้นเปิดประตู</span><span class="ql">แล้วมอบแผนที่ลูกค้าต้องการจริงๆ ให้เขา"</span></div>
   <div class="tag rv">จริงใจ · ลงมือ · อยู่ด้วยกัน • iAgencyAIA</div>
 </section>''')
 
@@ -369,7 +369,12 @@ T4CSS = '''
 .c14 .inv{display:flex;flex-direction:column;gap:.3em;margin-top:.3em}.c14 .inv .bub{align-self:flex-end}
 .ex{display:flex;flex-direction:column;gap:.4em;font-weight:700}.ex i{display:block;height:2.2em;border-bottom:2px dashed rgba(255,255,255,.3)}
 .on .late.rv{animation-delay:2.9s} /* S24: the 2 closing lines blur-in after the 7 pills */
-.quote .one{max-width:26ch}
+/* G1 R1: Thai display lines need room for stacked marks (lh 1.2 let tone marks touch the line above);
+   each source line is its own balanced block, and portrait drops one size step so a line takes <= 2 rows */
+.quote .one{max-width:26ch;line-height:var(--qlh,1.45)}
+.quote .one .ql{display:block;text-wrap:balance}
+.quote .one .ql+.ql{margin-top:.08em}
+@media (max-width:680px){.quote .one{font-size:clamp(20px,6.2vw,26px);max-width:none}}
 @media (max-width:680px){.c14{grid-template-columns:1fr;grid-template-areas:"r" "t" "e"}}
 '''
 
