@@ -81,7 +81,7 @@ S('''<section class="slide img cover" data-bg="cover">
 # S2 · series map, T.5 lit, T.6 added (F6 / bob T4 F4)
 smap = [('T.1', 'Mindset', ['ขายเพราะเชื่อในคุณค่าการวางแผน'], ''), ('T.2', 'เทคนิคการขาย', ['คำมั่นสัญญา จุดขาย AIA รับมือความเสี่ยง'], ''),
         ('T.3', 'กระบวนการขาย', ['อ่านคน เปิดใจ สร้างปัญหา นำเสนอ ปิด'], ''), ('T.4', 'Product Approach', ['ทางเข้าที่เร็วขึ้น ใช้สินค้าเป็น "ประตู" ทำนัด'], ''),
-        ('T.5', 'Need Approach', ['เข้าลึก 2-3 นัด', 'แผนครอบคลุมทั้งชีวิต'], 'now'), ('T.6', 'Workshop ปิดการขาย', ['ฝึกปิดการขายแบบลงมือทำ'], '')]
+        ('T.5', 'Need Approach', ['เข้าลึก 2-3 นัด', 'แผนครอบคลุมทั้งชีวิต'], 'now'), ('T.6', 'iPoS+ & FA Tools', ['ใช้เครื่องมือจริง ตั้งแต่ทำแผนจนยื่นใบคำขอ'], '')]
 li = ''.join(f'<li class="{c}"><b>{n}</b><b>{t}</b>' + ''.join(f'<span>{d}</span>' for d in ds) + '</li>' for n, t, ds, c in smap)
 S(f'''<section class="slide dots">
   <div class="kick rv">เชื่อม T.1-4 สู่ความลึกใหม่</div>
@@ -337,7 +337,7 @@ S('''<section class="slide img quote close" data-bg="leader">
   <div class="bar gbar rv"></div>
   <div class="one rv" data-read><span class="ql">"ตัวแทนที่ดี ขายสิ่งที่ลูกค้าต้องการ</span><span class="ql gold">นักวางแผนการเงินที่ดี ช่วยลูกค้าค้นพบสิ่งที่เขาต้องการจริงๆ"</span></div>
   <div class="tag rv late2">จริงใจ · ลงมือ · อยู่ด้วยกัน •</div>
-  <div class="next rv late2">🌟 คลาสถัดไป · T.6/6 Workshop ปิดการขาย</div>
+  <div class="next rv late2">🌟 คลาสถัดไป · T.6/6 iPoS+ & FA Tools</div>
 </section>''')
 
 T5CSS = '''
