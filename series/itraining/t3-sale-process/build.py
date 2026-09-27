@@ -238,7 +238,7 @@ S(f'''<section class="slide dots sol single">
 
 # 21 · part opener (white)
 S('''<section class="slide part ed">
-  <div class="kick rv">Professional Standard</div>
+  <div class="kick rv">Financial Planning</div>
   <h2 class="rv">ยกระดับสู่กระบวนการที่ปรึกษาการเงิน</h2>
   <div class="skew rv"></div>
 </section>''')
