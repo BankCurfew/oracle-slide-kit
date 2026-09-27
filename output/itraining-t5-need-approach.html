@@ -929,6 +929,10 @@ document.querySelectorAll('.vfacade').forEach((b) => {
     f.title = b.getAttribute('aria-label');
     f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
     b.replaceWith(f);
+    // designer G1 (T2250): leaving the slide must stop the audio, so the facade comes back when the slide loses .on
+    const slide = f.closest('.slide');
+    const mo = new MutationObserver(() => { if (!slide.classList.contains('on')) { mo.disconnect(); f.replaceWith(b); } });
+    mo.observe(slide, { attributes: true, attributeFilter: ['class'] });
   });
 });
 document.querySelectorAll('.ytlink').forEach((a) => a.addEventListener('click', (e) => e.stopPropagation()));
