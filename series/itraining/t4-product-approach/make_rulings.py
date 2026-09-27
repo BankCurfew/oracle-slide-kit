@@ -39,7 +39,7 @@ rule('S23', 'Need ลงทุน/เกษียณ', ['Need ลงทุน/�
      'การแนะนำและขาย Unit Linked ต้องมี ใบอนุญาตตัวแทนประกันชีวิต และ ใบอนุญาตผู้แนะนำการลงทุน (IC License) จาก ก.ล.ต. และขึ้นทะเบียนเป็นตัวแทนขาย Unit Linked กับ คปภ.'])  # R4 aia/fasai
 rule('S24', 'เปิดใจ+iCheck', 'เปิดใจ+iKnow→')
 rule('S26', 'เปิดใจ + ทำ iCheck', 'เปิดใจ + ทำ iKnow ให้ลูกค้าเห็นช่องว่าง')
-R['+S02'] = ['T.5 Need Approach', 'เริ่มจากความต้องการลูกค้า', 'T.6 Workshop ปิดการขาย', 'ฝึกปิดการขายแบบลงมือทำ']  # F4 + R6
+R['+S02'] = ['T.5 Need Approach', 'เริ่มจากความต้องการลูกค้า', 'T.6 iPoS+ & FA Tools', 'ใช้เครื่องมือจริง ตั้งแต่ทำแผนจนยื่นใบคำขอ']  # F4 + R6
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rulings.json')
 json.dump(R, open(out, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('wrote', out, sum(len(v) for k, v in R.items() if not k.startswith('+')), 'ruled lines +', len(R['+S02']), 'added')
