@@ -22,7 +22,7 @@ def norm(s):
     return re.sub(r'\s+', ' ', s).strip()
 
 want, cur = {}, None
-body = open(inv, encoding='utf-8').read().split('## Parity checklist', 1)[1]
+body = re.split(r'^## Parity (?:checklist|baseline)', open(inv, encoding='utf-8').read(), maxsplit=1, flags=re.M)[1]  # T2249: writer's T3 heading is 'baseline'
 for line in body.splitlines():
     if line.startswith('## '): cur = None; continue  # a later '## R..' section is notes, not slide lines (T2229)
     m = re.match(r'^### S(\d+)', line)
