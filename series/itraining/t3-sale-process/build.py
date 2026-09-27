@@ -84,7 +84,7 @@ S(f'''<section class="slide img cover" data-bg="cover">
 
 # 02 · series map (T.3 lit) + agenda, 6 rows of 2 lines
 smap = [('T.1 Mindset', ''), ('T.2 Sales Technique', ''), ('T.3 Sale Process &amp; MANHA', 'now'),
-        ('T.4 Product Approach', ''), ('T.5 Need Approach', ''), ('T.6 Workshop ปิดการขาย', '')]
+        ('T.4 Product Approach', ''), ('T.5 Need Approach', ''), ('T.6 iPoS+ & FA Tools', '')]
 sm = ''.join(f'<li class="{c}"><b>{t}</b></li>' for t, c in smap)
 ag = [('ปรับ Mindset &amp;', 'กฎเหล็กของนักขาย'), ('เจาะลึกเทคนิคเปิดใจ', 'และสังเกตภาษากาย'),
       ('การสร้างปัญหา &amp;', 'รับมือการบ่ายเบี่ยง'), ('Interactive Case Study:', 'ถอดรหัส MANHA<br>(5 เคสจริง)'),
