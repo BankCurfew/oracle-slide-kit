@@ -22,7 +22,7 @@ def norm(s):
     return re.sub(r'\s+', ' ', s).strip()
 
 want, cur = {}, None
-body = open(inv, encoding='utf-8').read().split('## Parity checklist', 1)[1]
+body = re.split(r'^## Parity (?:checklist|baseline)', open(inv, encoding='utf-8').read(), maxsplit=1, flags=re.M)[1]  # T2249: writer's T3 heading is 'baseline'
 for line in body.splitlines():
     if line.startswith('## '): cur = None; continue  # a later '## R..' section is notes, not slide lines (T2229)
     m = re.match(r'^### S(\d+)', line)
@@ -56,9 +56,11 @@ class P(HTMLParser):
         if t in ('script', 'style'): s.skip += 1
         if t == 'br' and s.depth: s.slides[-1] += ' '
         if t == 'ol' and s.depth: s.ol = 0
-        if t == 'li' and s.depth and hasattr(s, 'ol'): s.ol += 1; s.slides[-1] += f' {s.ol} '
+        if t == 'ul' and s.depth: s.ol = None  # T2250: a <ul> after an <ol> is not numbered
+        if t == 'li' and s.depth and getattr(s, 'ol', None) is not None: s.ol += 1; s.slides[-1] += f' {s.ol} '
     def handle_endtag(s, t):
         if t in ('script', 'style'): s.skip -= 1
+        if t == 'ol': s.ol = None
         if s.depth: s.depth -= 1
     def handle_data(s, d):
         if s.depth and not s.skip: s.slides[-1] += d + ' '
