@@ -51,7 +51,7 @@ Did not read `output/sop/CONDUCT-SLIDE-001-iagencyaia-slide-html.md` before buil
 Before building ANY slide/deck, run this gate:
 ```
 [ ] read CONDUCT-SLIDE-001 + UI-EFFECTS-CATALOG first (not optional)
-[ ] scene/people slides → Designer image brief dispatched (gemini-gen.sh, Thai/Asian) BEFORE writing HTML
+[ ] scene/people slides → Designer image brief dispatched (/poster CDP DALL-E, Thai/Asian; was gemini-gen.sh until T3030 14/10) BEFORE writing HTML
 [ ] motion: ≥6 catalog effects wired (blur-fade, spring, ticker, aurora-text, dots, kenburns)
 [ ] audience-first: zero explanatory paragraphs — chips/questions only
 [ ] tokens: charcoal #1C1C21, gold #C9A227 success-only, wordmark every slide
