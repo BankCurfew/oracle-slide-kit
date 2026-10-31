@@ -48,8 +48,7 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
 .foot{border-left:4px solid var(--red);padding:.35em 0 .35em .8em;font-weight:700;line-height:1.45;max-width:62ch}
 .intro{color:var(--muted);font-weight:700}
 .aurora{background:linear-gradient(90deg,var(--salmon),#fff 45%,var(--salmon) 90%);background-size:200% 100%;
-  -webkit-background-clip:text;background-clip:text;color:transparent;animation:aur 6s linear infinite}
-@keyframes aur{to{background-position:-200% 0}}
+  -webkit-background-clip:text;background-clip:text;color:transparent}   /* T3503 MOTION 2.3/2.4: was an endless 6 s background-position loop */
 
 /* ---------- backgrounds ---------- */
 .slide.img::before{content:"";position:absolute;inset:0;z-index:0;background-image:var(--bg);background-size:cover;background-position:center;
@@ -57,17 +56,16 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
 .slide.img::after{content:"";position:absolute;inset:0;z-index:1;
   background:linear-gradient(90deg,rgba(28,28,33,.97) 0%,rgba(28,28,33,.84) 48%,rgba(28,28,33,.5) 100%),
              radial-gradient(120% 80% at 15% 50%,rgba(211,17,69,.16),transparent 60%)}
-@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.08) translate(1.4%,-1.4%)}}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.04) translate(-10px,-6px)}}   /* T3503 MOTION 2.3: <= 4 % scale, <= 12 px drift (was 8 % + 1.4 %) */
 .slide.dots::after{content:"";position:absolute;inset:-26px;z-index:0;pointer-events:none;
-  background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:26px 26px;animation:gridmove 14s linear infinite}
-@keyframes gridmove{to{background-position:26px 26px}}
+  background-image:radial-gradient(rgba(255,255,255,.055) 1px,transparent 1px);background-size:26px 26px}   /* T3503 MOTION 2.3: static (was a 2nd endless loop) */
 
 /* ---------- reveal on enter (blur-fade stagger) ---------- */
-.on .rv{opacity:0;filter:blur(8px);transform:translateY(18px);animation:blurup .65s var(--spring) forwards}
-.on .rv:nth-child(1){animation-delay:.04s}.on .rv:nth-child(2){animation-delay:.12s}.on .rv:nth-child(3){animation-delay:.2s}
-.on .rv:nth-child(4){animation-delay:.28s}.on .rv:nth-child(5){animation-delay:.36s}.on .rv:nth-child(6){animation-delay:.44s}
-.on .rv:nth-child(n+7){animation-delay:.5s}
-@keyframes blurup{to{opacity:1;filter:none;transform:none}}
+/* T3503 MOTION 2.1/2.4: fade-up, no blur (blur ran on every .rv for 650 ms) · 320 ms enter · 60 ms stagger, 7+ come in as one group */
+.on .rv{opacity:0;transform:translateY(14px);animation:blurup .32s var(--spring) forwards}
+.on .rv:nth-child(2){animation-delay:.06s}.on .rv:nth-child(3){animation-delay:.12s}.on .rv:nth-child(4){animation-delay:.18s}
+.on .rv:nth-child(5){animation-delay:.24s}.on .rv:nth-child(6){animation-delay:.3s}.on .rv:nth-child(n+7){animation-delay:.36s}
+@keyframes blurup{to{opacity:1;transform:none}}
 
 /* 21st 19257 Text Reveal (Mask): each <br> line rises out of its own mask. Whole lines only (Thai never split).
    The mask has vertical room so Thai upper/lower marks are never clipped. */
@@ -140,9 +138,8 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
   background:conic-gradient(from var(--ang),transparent 0 60%,var(--red) 75%,var(--salmon) 85%,transparent 95%);
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .on .card.spot::after{animation:glow 1.6s ease-out forwards;animation-delay:calc(.5s + var(--ci,0) * .18s)}
-.card.spot:hover::after{opacity:1;animation:spin 3s linear infinite}
+.card.spot:hover::after{opacity:1}   /* T3503 MOTION 2.3: was an endless spin while hovered (sticks on touch) */
 @keyframes glow{0%{opacity:0;--ang:0deg}25%{opacity:1}100%{opacity:0;--ang:360deg}}
-@keyframes spin{to{--ang:360deg}}
 .ct{font-weight:800;font-size:1.12em;line-height:1.25}
 .cd{line-height:1.42}
 .cd.dim,.card.dim .cd{color:var(--muted)}
@@ -173,8 +170,7 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
 .brk .rays{position:absolute;inset:-20%;z-index:1;pointer-events:none;opacity:.5;
   background:repeating-conic-gradient(from 200deg at 50% -10%,rgba(255,255,255,.07) 0 4deg,transparent 4deg 14deg);
   -webkit-mask:radial-gradient(70% 70% at 50% 0,#000,transparent 75%);mask:radial-gradient(70% 70% at 50% 0,#000,transparent 75%);
-  animation:rays 12s ease-in-out infinite alternate}
-@keyframes rays{to{transform:rotate(6deg)}}
+  }   /* T3503 MOTION 2.3: static. The break slide is also .img, so its Ken Burns is its one ambient loop (rays was a 2nd, 12 s / 6deg) */
 
 /* ---------- work cycle: RING on the stepper (landscape) · vertical stepper (portrait) ---------- */
 .cycwrap{position:relative;width:min(56vh,46vw);aspect-ratio:1;align-self:center;margin:.2em 0}
@@ -212,17 +208,19 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
 
 /* ---------- close (21st 664 Background Circles) ---------- */
 .close .circles{position:absolute;right:-8vw;top:50%;width:min(70vh,60vw);aspect-ratio:1;transform:translateY(-50%);z-index:1;pointer-events:none}
-.close .circles i{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(211,17,69,.35);animation:ripple 6s ease-out infinite}
-.close .circles i:nth-child(2){animation-delay:2s;border-color:rgba(232,153,141,.3)}
-.close .circles i:nth-child(3){animation-delay:4s}
-@keyframes ripple{from{transform:scale(.25);opacity:1}to{transform:scale(1.15);opacity:0}}
+/* T3503 MOTION 2.3: the rings ripple out ONCE on enter and rest (was an endless 6 s loop) */
+.close .circles i{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(211,17,69,.35)}
+.close .circles i:nth-child(2){border-color:rgba(232,153,141,.3);transform:scale(.8)}
+.close .circles i:nth-child(3){transform:scale(.6)}
+.on.close .circles i{animation:ripple .64s ease-out both}
+.on.close .circles i:nth-child(2){animation-delay:.06s;--rs:.8}.on.close .circles i:nth-child(3){animation-delay:.12s;--rs:.6}
+@keyframes ripple{from{transform:scale(.25);opacity:0}to{transform:scale(var(--rs,1));opacity:1}}
 .card.hw{max-width:700px;background:rgba(28,28,33,.82)}
 .card.hw ol{padding-left:1.3em;display:flex;flex-direction:column;gap:.25em;line-height:1.42}
 .card.hw .r{color:var(--salmon)}
 .tag{font-weight:800;letter-spacing:.06em}
 .marq{position:absolute!important;left:0;right:0;bottom:calc(34px + env(safe-area-inset-bottom));overflow:hidden;z-index:2;opacity:.22;white-space:nowrap;font-weight:900;font-size:1.4em}
-.marq>div{display:inline-block;animation:marq 30s linear infinite}
-@keyframes marq{to{transform:translateX(-50%)}}
+.marq>div{display:inline-block}   /* T3503 MOTION 2.3: static (was an endless 30 s marquee) */
 
 /* ---------- short landscape (phones sideways): size by height ---------- */
 @media (orientation:landscape) and (max-height:520px){
@@ -269,6 +267,8 @@ h2{font-size:clamp(26px,min(3.6vw,6.4vh),58px);font-weight:900;line-height:1.14;
 .loopback{display:none;color:var(--salmon);font-weight:700;margin:.2em 0 0 calc(1.05em + 3px);padding-left:1.2em;border-left:2px dashed var(--salmon);opacity:0;transition:opacity .5s}
 .cyc.done .loopback{opacity:1}
 
+/* T3503 MOTION 2.3/2.5: a slide that is not showing runs nothing (its ambient loop resumes when it comes back) */
+.slide:not(.on),.slide:not(.on)::before,.slide:not(.on)::after,.slide:not(.on) *,.slide:not(.on) *::before,.slide:not(.on) *::after{animation-play-state:paused!important}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .on .rv{opacity:1;filter:none;transform:none}
