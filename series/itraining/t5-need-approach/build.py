@@ -488,6 +488,13 @@ document.querySelectorAll('.vfacade').forEach((b) => {
 document.querySelectorAll('.ytlink').forEach((a) => a.addEventListener('click', (e) => e.stopPropagation()));
 '''
 
+CINE = bool(os.environ.get('CINE_SAMPLE'))   # T3503 cinematic sample (fe): 4 slides + cine kit, written to preview/ only
+if CINE:
+    import sys; sys.path.insert(0, HERE); import cine_sample
+    SLIDES[:] = cine_sample.transform(SLIDES)
+    T5CSS += open(os.path.join(SERIES, 'cine.css'), encoding='utf-8').read()
+    VIDJS += open(os.path.join(SERIES, 'cine.js'), encoding='utf-8').read()
+    OUT = os.path.join(HERE, '..', '..', '..', 'preview', 'itraining-t5-cine-sample.html'); os.makedirs(os.path.dirname(OUT), exist_ok=True)
 CSS = open(os.path.join(SERIES, 'deck.css'), encoding='utf-8').read() + T5CSS
 JS = open(os.path.join(SERIES, 'deck.js'), encoding='utf-8').read() + VIDJS
 BGS = {k: bg(k) for k in ['cover', 'listen', 'coach', 'light', 'group', 'leader']}
@@ -528,7 +535,8 @@ assert '—' not in html and '–' not in html, 'em/en dash found'
 assert not re.search(r'\S - \S', text), 'spaced ASCII hyphen used as a dash'
 assert 'รอยืนยัน' not in html and 'iCheck' not in html and 'Circle of Life' not in html and '9,434,000' not in html
 assert '<iframe' not in body, 'videos must be facades until tapped'
-assert html.count('class="ql gold"') == 1 and html.count('class="bar gbar rv"') == 1, 'gold must be on S22 only'
-assert len(SLIDES) == 35, len(SLIDES)   # 32 + 3 T3503 overflow splits (S4, S10, S11)
+if not CINE:   # full-deck checks (the cinematic sample is 4 slides of it)
+    assert html.count('class="ql gold"') == 1 and html.count('class="bar gbar rv"') == 1, 'gold must be on S22 only'
+    assert len(SLIDES) == 35, len(SLIDES)   # 32 + 3 T3503 overflow splits (S4, S10, S11)
 open(OUT, 'w', encoding='utf-8').write(html)
 print('wrote', OUT, len(html), 'bytes,', len(SLIDES), 'slides,', html.count('data-pending='), 'pending')

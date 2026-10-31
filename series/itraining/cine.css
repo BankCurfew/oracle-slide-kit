@@ -1,0 +1,72 @@
+/* cine.css · T3503 cinematic kit (designer direction 21acc9bd, fe build) · PREVIEW ONLY until แบงค์ OKs the REVIEW
+ * Pieces (cine.js wires them): cam push/pan · depth · flight (FLIP) · sweep · keep (+ data-exit / data-enter rows)
+ * Rules: transform / opacity / clip-path / mask only · nothing runs on a hidden slide (they are display:none) ·
+ * prefers-reduced-motion = the end frame: no push, pan, flight or sweep (cine.js skips them; CSS below lands end states)
+ * Tokens (CONDUCT-MOTION-001 2.1): 160 press · 320 enter · 640 scene/continuity · stagger 60 · move curve below
+ */
+:root{--cine-move:cubic-bezier(.65,0,.35,1);--cine-in:cubic-bezier(.22,1,.36,1)}
+
+/* ---------- cam: push (BG photo = the slide's ::before) ---------- */
+.slide[data-cam^="push"]::before{animation:none}                  /* replaces Ken Burns on this slide */
+.slide.on[data-cam^="push"]::before{animation:cine-push var(--cam-ms,8000ms) ease-in-out both;transform-origin:50% 45%}
+@keyframes cine-push{from{transform:scale(1)}to{transform:scale(var(--cam-scale,1.06))}}
+
+/* ---------- depth: a layer that follows the camera at a factor ---------- */
+.cine-layer{position:absolute!important;inset:-24px;z-index:1!important;pointer-events:none}
+.cine-dots{background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px}
+.cine-vig{inset:0;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(10,10,14,.55) 100%)}   /* fixed window */
+.slide.on[data-cam^="push"] [data-depth]{animation:cine-push var(--cam-ms,8000ms) ease-in-out both;--cam-scale:var(--depth-scale,1.024)}
+.slide.on[data-cam^="pan"] [data-depth]{animation:cine-pan var(--pan-ms,1600ms) var(--cine-move) var(--pan-delay,0ms) both;--pan-y:var(--depth-y,-10px)}
+
+/* ---------- cam: pan (TEXT block = .cine-cam wrapper; its children keep their own entry animations) ---------- */
+.cine-cam{display:flex;flex-direction:column;gap:inherit;align-items:inherit;width:100%;position:relative;z-index:2}
+.slide.on[data-cam^="pan"] .cine-cam{animation:cine-pan var(--pan-ms,1600ms) var(--cine-move) var(--pan-delay,0ms) both}
+@keyframes cine-pan{from{transform:none}to{transform:translateY(var(--pan-y,-24px))}}
+
+/* ---------- s3 journey: the line draws through the flow, each pill lights as the line reaches it ---------- */
+.cine-flow{position:relative}
+.cine-flow .cine-line{position:absolute;z-index:0;background:var(--red);border-radius:2px;pointer-events:none;
+  left:0;right:0;top:50%;height:2px;transform:scaleX(0);transform-origin:0 50%}
+.slide.on .cine-flow .cine-line{animation:cine-linex .64s var(--cine-move) var(--line-delay,.5s) both}
+@keyframes cine-linex{to{transform:scaleX(1)}}
+.cine-flow li{position:relative;z-index:1}
+.cine-flow li span{position:relative}
+.cine-flow li span::after{content:"";position:absolute;inset:-3px;border-radius:999px;pointer-events:none;opacity:0;
+  box-shadow:0 0 0 2px rgba(211,17,69,.55),0 0 18px rgba(211,17,69,.55)}
+.slide.on .cine-flow li span::after{animation:cine-glow .32s ease-out both;animation-delay:calc(var(--line-delay,.5s) + var(--k,0) * .16s + .16s)}
+.slide.on .cine-flow li.opt span::after{animation-name:cine-glow-half}           /* "if needed": half light */
+@keyframes cine-glow{to{opacity:1}}
+@keyframes cine-glow-half{to{opacity:.5}}
+@media (max-width:680px){                                                          /* 393: the flow is a vertical journey */
+  .cine-flow{flex-direction:column;align-items:flex-start;padding-left:14px;gap:.55em}
+  .cine-flow li i{display:none}
+  .cine-flow .cine-line{left:0;right:auto;top:0;bottom:0;width:2px;height:auto;transform:scaleY(0);transform-origin:50% 0}
+  .slide.on .cine-flow .cine-line{animation-name:cine-liney}
+}
+@keyframes cine-liney{to{transform:scaleY(1)}}
+
+/* ---------- sweep: one light pass inside the letters (a white copy, masked by a moving band) ---------- */
+.cine-sweep-host{position:relative}
+.cine-sweep{position:absolute;inset:0;pointer-events:none;color:#fff!important;-webkit-text-fill-color:#fff;background:none!important;
+  opacity:.75;-webkit-mask-image:linear-gradient(90deg,transparent,#000 50%,transparent);mask-image:linear-gradient(90deg,transparent,#000 50%,transparent);
+  -webkit-mask-size:30% 100%;mask-size:30% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:-40% 0;mask-position:-40% 0}
+.cine-sweep.go{animation:cine-sweep .64s var(--cine-move) both}
+@keyframes cine-sweep{from{-webkit-mask-position:-40% 0;mask-position:-40% 0}to{-webkit-mask-position:140% 0;mask-position:140% 0}}
+
+/* ---------- flight / keep / exit / enter (cine.js drives them with WAAPI) ---------- */
+.cine-ghost{position:fixed!important;margin:0!important;z-index:50!important;pointer-events:none;transform-origin:0 0;will-change:transform,opacity}
+.cine-hold{opacity:0!important;animation:none!important}                           /* a flight target, until it lands */
+.cine-still{animation:none!important;opacity:1!important;transform:none!important;filter:none!important} /* keep: no re-reveal (filter: the old .rv base state is blur(8px)) */
+.slide.on [data-enter].cine-rows{animation:none!important;opacity:1!important;transform:none!important}
+
+@media (prefers-reduced-motion:reduce){
+  /* end frames, no movement (designer: RM = end frame) */
+  .slide.on[data-cam^="push"]::before{animation:none!important;transform:scale(var(--cam-scale,1.06))!important}
+  .slide.on[data-cam^="push"] [data-depth]{animation:none!important;transform:scale(var(--depth-scale,1.024))!important}
+  .slide.on[data-cam^="pan"] .cine-cam{animation:none!important;transform:translateY(var(--pan-y,-24px))!important}
+  .slide.on[data-cam^="pan"] [data-depth]{animation:none!important;transform:translateY(var(--depth-y,-10px))!important}
+  .cine-flow .cine-line{transform:none!important}
+  .cine-flow li span::after{opacity:1!important}.cine-flow li.opt span::after{opacity:.5!important}
+  .cine-sweep{display:none}
+}
