@@ -370,9 +370,8 @@ S('''<section class="slide img quote" data-bg="leader">
   <div class="tag rv">จริงใจ · ลงมือ · อยู่ด้วยกัน • iAgencyAIA</div>
 </section>''')
 
-# 41 · close: next class T.3/6 + tagline + marquee (F8: counts once)
+# 41 · close: next class T.3/6 + tagline + marquee (F8: counts once) · background circles come from deck.js only (T3503: a second hardcoded set doubled the loop)
 S('''<section class="slide img close" data-bg="cover">
-  <div class="circles" aria-hidden="true"><i></i><i></i><i></i></div>
   <div class="kick rv">iTRAINING</div>
   <h2 class="rv">T.2/6 <span class="aurora">Sales Technique</span></h2>
   <div class="lead rv">T.2/6 เทคนิคการขายประกันชีวิต</div>
