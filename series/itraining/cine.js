@@ -7,6 +7,9 @@
  *   data-keep="<key>" (both slides)     stays put across the pair: no re-reveal; the target slide is padded so it lines up
  *   data-exit / data-enter              rows that leave (up + fade 240 ms) / arrive (rise 320 ms, stagger 60 ms)
  *   data-sweep[="ms after show"]        one light pass inside the letters, 640 ms
+ *   data-fly-wait (on the receiving slide) its other entries wait until the flight lands (paused, stagger kept)
+ *   hero (MOTION v1.2 2.8/2.9): the .cine-flow reveal is the slide's hero (data-hero); a tap while it runs lands its
+ *   end frame (line + glows finished) and stays on the slide, like a flight. The camera push is not a hero (E1).
  * Slides that are not showing are display:none, so positions are snapshotted BEFORE deck.js moves (capture-phase
  * input listeners) and whenever the showing slide settles. Reduced motion: no flight / sweep / push / pan (end frames).
  */
@@ -27,6 +30,7 @@
       if (c[0] === 'pan') l.style.setProperty('--depth-y', ((Number(c[2]) || -24) * f) + 'px');
     });
     // sweep: a white copy of the text, masked by a moving band (stays inside the letters)
+    s.querySelectorAll('.cine-flow').forEach(f => f.setAttribute('data-hero', ''));   // motion-check finds the hero by this
     s.querySelectorAll('[data-sweep]').forEach(el => {
       el.classList.add('cine-sweep-host');
       const g = document.createElement('span'); g.className = 'cine-sweep'; g.setAttribute('aria-hidden', 'true'); g.textContent = el.textContent;
@@ -49,7 +53,12 @@
   const finishFlights = () => { flying.forEach(a => { try { a.finish(); } catch {} }); flying = []; };
   // interruptible: a tap mid-flight lands it, and that tap does nothing else (the deck does not also move)
   let swallow = false;
-  addEventListener('pointerdown', e => { if (flying.some(a => a.playState === 'running')) { swallow = true; finishFlights(); e.stopImmediatePropagation(); } }, { capture: true });
+  const heroRunning = () => { const s = slides[cur]; return !!s && [...s.querySelectorAll('[data-hero]')].some(h => h.getAnimations({ subtree: true }).some(a => a.playState === 'running' || (a.playState === 'paused' && a.currentTime === 0))); };
+  const landHero = () => { const s = slides[cur]; s && s.querySelectorAll('[data-hero]').forEach(h => h.getAnimations({ subtree: true }).forEach(a => { try { a.finish(); } catch {} })); };
+  addEventListener('pointerdown', e => {
+    const flight = flying.some(a => a.playState === 'running'), hero = heroRunning(); if (!flight && !hero) return;
+    swallow = true; if (flight) finishFlights(); if (hero) landHero(); e.stopImmediatePropagation();
+  }, { capture: true });
   addEventListener('click', e => { if (swallow) { swallow = false; e.stopImmediatePropagation(); e.preventDefault(); } }, { capture: true });
 
   const ghost = (x, inner) => {   // a fixed copy of an element at its old place (the source slide is gone already)
@@ -61,7 +70,7 @@
 
   // ---- one transition: from snap.from to the slide that just got .on ----
   const onShow = (to) => {
-    const s = slides[to], from = snap && snap.from;
+    const s = slides[to], from = snap && snap.from; s.classList.remove('cine-wait');
     const adjacent = snap && from !== to && from !== -1;
     // keep: line the target up with the source (pad its top), no re-reveal
     if (adjacent && snap.keep.length) {
@@ -91,13 +100,13 @@
     // flight: source copy flies (translate + scale) onto the target, which is hidden until it lands
     if (adjacent) snap.fly.forEach(x => {
       const t = [...s.querySelectorAll('[data-fly]')].find(e => e.dataset.fly === x.key); if (!t) return;
-      t.classList.add('cine-hold');
+      t.classList.add('cine-hold'); if (s.hasAttribute('data-fly-wait')) s.classList.add('cine-wait');
       requestAnimationFrame(() => {   // the target's layout after this slide's first frame
         const tr = t.getBoundingClientRect(), g = ghost(x), k = tr.height / x.r.height;
         const a = g.animate([{ transform: 'none', opacity: 1 }, { transform: `translate(${tr.left - x.r.left}px,${tr.top - x.r.top}px) scale(${k})`, opacity: 1 }],
           { duration: 640, easing: MOVE, fill: 'forwards' });
         flying.push(a);
-        const land = () => { t.classList.add('cine-still'); t.classList.remove('cine-hold'); g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' }).finished.then(() => g.remove(), () => g.remove()); };
+        const land = () => { t.classList.add('cine-still'); t.classList.remove('cine-hold'); s.classList.remove('cine-wait'); g.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, fill: 'forwards' }).finished.then(() => g.remove(), () => g.remove()); };
         a.finished.then(land, land);
       });
     });

@@ -58,6 +58,8 @@
 .cine-ghost{position:fixed!important;margin:0!important;z-index:50!important;pointer-events:none;transform-origin:0 0;will-change:transform,opacity}
 .cine-hold{opacity:0!important;animation:none!important}                           /* a flight target, until it lands */
 .cine-still{animation:none!important;opacity:1!important;transform:none!important;filter:none!important} /* keep: no re-reveal (filter: the old .rv base state is blur(8px)) */
+/* data-fly-wait (designer, 31 Oct): the rest of a receiving slide waits for the flight; paused, so each keeps its own stagger */
+.slide.cine-wait .rv:not([data-fly]){animation-play-state:paused!important}
 .slide.on [data-enter].cine-rows{animation:none!important;opacity:1!important;transform:none!important}
 
 @media (prefers-reduced-motion:reduce){

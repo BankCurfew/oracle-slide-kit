@@ -17,7 +17,7 @@ def transform(slides):
                  '  <div class="cine-layer cine-dots" data-depth="0.4" aria-hidden="true"></div><div class="cine-layer cine-vig" aria-hidden="true"></div>')
     cover = _one(cover, '<span class="aurora">Need Approach</span>', '<span class="aurora" data-fly="title" data-sweep="900">Need Approach</span>')
     # 2 · s3: receives the title as its kick; TEXT block pans -24 px while the line draws through the 3 pills (E2)
-    concept = _one(concept, '<section class="slide dots ans">', '<section class="slide ans" data-cam="pan:y:-24:1600:500">\n'
+    concept = _one(concept, '<section class="slide dots ans">', '<section class="slide ans" data-cam="pan:y:-24:1600:500" data-fly-wait>\n'
                    '  <div class="cine-layer cine-dots" data-depth="0.4" aria-hidden="true"></div>\n  <div class="cine-cam">')
     concept = _one(concept, '<div class="kick rv">Need Approach</div>', '<div class="kick rv" data-fly="title">Need Approach</div>')
     concept = _one(concept, '<ul class="flow">', '<ul class="flow cine-flow"><li class="cine-line" aria-hidden="true"></li>')
