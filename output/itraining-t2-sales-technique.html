@@ -420,12 +420,12 @@ table.obj td.gap{width:.6em;padding:0;background:none;border:0}
 .agenda{list-style:none;display:flex;flex-direction:column;gap:.35em;width:100%;max-width:980px}
 .agenda li{display:flex;align-items:center;gap:.8em;border-bottom:1px solid var(--line);padding:.35em 0;font-weight:700;line-height:1.3;min-height:clamp(40px,6.4vh,56px)}
 .agenda .an{color:var(--red);font-weight:900;font-size:max(24px,1.5em);min-width:1.4em;text-align:center}
-/* S6 priority (ordered top to bottom, #1 larger) */
+/* S6 priority (ordered top to bottom); #1 stands out by colour + border only, one text size for all rows (T3503, CONDUCT-MOTION 3.3) */
 .prio{list-style:none;display:flex;flex-direction:column;gap:.5em;width:100%;max-width:980px}
 .prio li{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:.4em 1em;border:1px solid var(--line);border-radius:14px;padding:.5em .9em;background:rgba(38,38,44,.78)}
 .prio li b{font-weight:900}.prio li>span:last-child{color:var(--muted)}
 .prio .pn{color:var(--red);font-weight:900;font-size:max(24px,1.6em);line-height:1}
-.prio li.top{font-size:1.18em;border-color:rgba(232,153,141,.55)}
+.prio li.top{border:2px solid var(--salmon);box-shadow:inset 6px 0 0 var(--salmon);background:rgba(232,153,141,.12)}
 /* S11-S14 risk cards: number chip · title · example bubble · result after a red rule */
 .risk{display:flex;flex-direction:column;gap:.5em;width:100%}
 .risk .rh{display:flex;align-items:center;gap:.6em;font-size:1.15em}

@@ -105,11 +105,19 @@ t4 = [('เริ่มจาก', 'สินค้าที่ตรงกั�
       ('ความลึก', 'ตอบ Need เฉพาะจุด', 'ครอบคลุมทั้งชีวิต'), ('เหมาะกับ', 'ลูกค้าที่ Need ชัดแล้ว', 'ลูกค้าที่ยังไม่เคยวางแผน')]
 tool = S4_TOOL
 t4b = t4 + [('เครื่องมือ', tool, 'Story + Financial Planning + อัตราส่วนการเงิน')]
+# T3503 (designer audit, 31 Oct): 5 rows + foot ran 987 px at 393x852 → 2 slides, one thought each, text unchanged:
+# how they differ (start, appointments, depth) · when to use which (fits, tools) + the verdict
+h4 = ['', 'Product Approach (T.4)', 'Need Approach (T.5)']
 S(f'''<section class="slide dots cmp4 scroll">
   <div class="kick rv">💬 ยกมือ เปรียบเทียบ Product vs Need Approach</div>
   <h2 class="rv">Product vs Need Approach</h2>
-  {table(['', 'Product Approach (T.4)', 'Need Approach (T.5)'], t4b, 'cmp')}
-  {rowcards(['', 'Product Approach (T.4)', 'Need Approach (T.5)'], t4b, 'cmp')}
+  {table(h4, t4b[:3], 'cmp')}
+  {rowcards(h4, t4b[:3], 'cmp')}
+</section>''')
+S(f'''<section class="slide dots cmp4 scroll">
+  <h2 class="rv">Product vs Need Approach</h2>
+  {table(h4, t4b[3:], 'cmp')}
+  {rowcards(h4, t4b[3:], 'cmp')}
   <div class="foot rv center">ไม่มีอันไหนดีกว่า<br>เลือกใช้ตามลูกค้าที่อยู่ตรงหน้า</div>
 </section>''')
 
@@ -171,11 +179,18 @@ S(qs('พอดูจบ ลูกค้าของคุณอยู่ช่�
 t10 = [('เงินสำรองฉุกเฉิน', '3-6 เดือนของรายจ่าย', 'พอดูแลตัวเองถ้าขาดรายได้'), ('ความคุ้มครองชีวิต', '5-10 เท่าของรายได้ต่อปี', 'ครอบครัวอยู่ได้ถ้าเราจากไป'),
        ('สัดส่วนหนี้ต่อรายได้', 'ไม่เกิน 40%', 'ไม่เป็นทาสหนี้'), ('อัตราการออม', 'อย่างน้อย 10-20% ของรายได้', 'มีอนาคตทางการเงิน'),
        ('ค่ารักษาพยาบาลสำรอง', 'วงเงินคุ้มครองสุขภาพ ≥ 1-5 ล้าน', 'ป่วยแล้วไม่กินทุน')]
+# T3503: 5 rows + foot ran 936 px at 393x852 → 2 slides (rows 1-3 · rows 4-5 + the goal line), text unchanged
+h10 = ['อัตราส่วน', 'หลักคิดทั่วไป', 'ความหมาย']
 S(f'''<section class="slide dots scroll">
   <div class="kick rv">เครื่องมือชี้ปัญหา สำหรับนักวางแผนการเงิน</div>
   <h2 class="rv">อัตราส่วนทางการเงิน</h2>
-  {table(['อัตราส่วน', 'หลักคิดทั่วไป', 'ความหมาย'], t10, 'rat')}
-  {rowcards(['อัตราส่วน', 'หลักคิดทั่วไป', 'ความหมาย'], t10, 'rat')}
+  {table(h10, t10[:3], 'rat')}
+  {rowcards(h10, t10[:3], 'rat')}
+</section>''')
+S(f'''<section class="slide dots scroll">
+  <h2 class="rv">อัตราส่วนทางการเงิน</h2>
+  {table(h10, t10[3:], 'rat')}
+  {rowcards(h10, t10[3:], 'rat')}
   <div class="foot rv">เป้า: อยู่ได้ถ้าขาดรายได้</div>
 </section>''')
 S(qs('ลูกค้ารายได้ 50,000/เดือน ควรมีเงินสำรองฉุกเฉินเท่าไหร่?', None, answer='💬 คำนวณแบบเผื่อไว้ (ใช้รายได้แทนรายจ่าย): 50,000 x 6 = 300,000 บาท (มีกี่คนที่มีครบ?)'))
@@ -190,11 +205,18 @@ t11 = [('เงินสำรองฉุกเฉิน', '50,000 (1 เท่
        ('อัตราการออม', '5,000/เดือน (10%)', '10,000/เดือน (20%)', chip('⚠️ ถึงขั้นต่ำ ยังไม่ถึงเป้า 20%')),
        ('หนี้ต่อรายได้', '20,000/เดือน (40%) กู้บ้าน 5M', 'ไม่เกิน 40%', chip('⚠️ เต็มเพดาน'))]
 h11 = ['รายการ', 'สถานะปัจจุบัน', 'เกณฑ์ที่ควรมี', 'ผลวิเคราะห์']
+# T3503: profile + 5 rows + take ran 1337 px at 393x852 → 2 slides, text unchanged:
+# who คุณเอ is + the first 2 gaps · the other 3 gaps + the takeaway
 S(f'''<section class="slide dots case11 scroll">
   <div class="kick rv">ตัวอย่าง: คุณเอ</div>
   <div class="prof rv"><b>👤 คุณเอ · อายุ 35 ปี</b><span class="chip">พนักงานเงินเดือน 50,000/เดือน</span><span class="chip">เพิ่งแต่งงาน วางแผนมีลูกใน 2 ปี</span><span class="chip">กู้บ้าน 5M ร่วมภรรยา ผ่อน 20,000/เดือน</span><span class="chip">สวัสดิการบริษัท: ค่ารักษาพยาบาล 100,000 บาท</span></div>
-  {table(h11, t11, 'c11')}
-  {rowcards(h11, t11, 'c11')}
+  {table(h11, t11[:2], 'c11')}
+  {rowcards(h11, t11[:2], 'c11')}
+</section>''')
+S(f'''<section class="slide dots case11 scroll">
+  <div class="kick rv">ตัวอย่าง: คุณเอ</div>
+  {table(h11, t11[2:], 'c11')}
+  {rowcards(h11, t11[2:], 'c11')}
   <div class="take rv">"หนี้เต็มเพดาน 40% + คุ้มครองชีวิตขาดมาก ถ้าเกิดอะไรขึ้น ภรรยาต้องแบกภาระบ้าน 5 ล้านคนเดียว"</div>
 </section>''')
 
@@ -507,6 +529,6 @@ assert not re.search(r'\S - \S', text), 'spaced ASCII hyphen used as a dash'
 assert 'รอยืนยัน' not in html and 'iCheck' not in html and 'Circle of Life' not in html and '9,434,000' not in html
 assert '<iframe' not in body, 'videos must be facades until tapped'
 assert html.count('class="ql gold"') == 1 and html.count('class="bar gbar rv"') == 1, 'gold must be on S22 only'
-assert len(SLIDES) == 32, len(SLIDES)
+assert len(SLIDES) == 35, len(SLIDES)   # 32 + 3 T3503 overflow splits (S4, S10, S11)
 open(OUT, 'w', encoding='utf-8').write(html)
 print('wrote', OUT, len(html), 'bytes,', len(SLIDES), 'slides,', html.count('data-pending='), 'pending')
